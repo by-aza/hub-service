@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Deviz Reparație</title>
+
+    <style>
+        /* ============================================
+   RESET + FUNDAL
+============================================ */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ============================================
+   PAGINA A4
+============================================ */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            margin: 10mm auto;
+            padding: 12mm;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* ============================================
+   WATERMARK
+============================================ */
+        .watermark {
+            position: absolute;
+            top: 55mm;
+            left: 30mm;
+            width: 150mm;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============================================
+   BUTOANE
+============================================ */
+        .btn-container {
+            margin: 20px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-print {
+            background-color: #0275d8;
+            color: white;
+        }
+
+        .btn-add {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .btn-clear {
+            background-color: #c62828;
+            color: white;
+        }
+
+        /* ============================================
+   TITLU DEVIZ
+============================================ */
+        .title-deviz {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        /* ============================================
+   DATE AUTOVEHICUL
+============================================ */
+        .info-section div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-section strong {
+            width: 150px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input {
+            background: transparent;
+            border-bottom: 1px dashed #888;
+            padding: 3px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* ============================================
+   LINII GRI ÎNTRE SECȚIUNI
+============================================ */
+        .section-line {
+            border-bottom: 1px solid #666;
+            margin: 20px 0;
+        }
+
+        /* ============================================
+   TABEL PIESE
+============================================ */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th {
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        td:first-child input {
+            width: 98% !important;
+        }
+
+        .qty {
+            width: 60px;
+            text-align: center;
+        }
+
+        .price {
+            width: 80px;
+            text-align: center;
+        }
+
+        .row-total {
+            width: 90px;
+            font-size: 13px !important;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* buton ștergere rând */
+        .delete-btn {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+		
+		.btn-back {
+    background-color: #555;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 15px;
+    display: inline-block;
+}
+
+        /* ============================================
+   TOTALURI (stabile, verticale)
+============================================ */
+        .total-block {
+            margin-bottom: 18px;
+        }
+
+        .total-block .label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        .discount-input-inline {
+            width: 35px !important;
+            padding: 0 !important;
+            border-bottom: 1px dashed #888 !important;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 2px;
+        }
+
+        /* Eliminăm săgețile din input number */
+        .discount-input-inline::-webkit-inner-spin-button,
+        .discount-input-inline::-webkit-outer-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield !important;
+        }
+
+        .discount-input-inline {
+            -moz-appearance: textfield !important;
+        }
+
+        .value {
+            display: block;
+            margin-left: 20px;
+            margin-top: 3px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .total-final .value {
+            font-size: 14px;
+        }
+
+        /* ============================================
+   OBSERVAȚII
+============================================ */
+        .observatii {
+            margin-top: 40px;
+        }
+
+        .obs-title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .obs-list {
+            margin-left: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .obs-small {
+            margin-top: 30px;
+            padding-left: 20px;
+            text-indent: -10px;
+            font-size: 8px;
+            font-weight: bold;
+            line-height: 1.3;
+            white-space: pre-line;
+        }
+
+        /* ============================================
+   PRINT MODE FINAL
+============================================ */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        @media print {
+
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .discount-line input {
+                width: 35px !important;
+                text-align: center;
+            }
+
+            .btn-container {
+                display: none !important;
+            }
+
+            /* ascundem coloana cu butonul X */
+            th:last-child,
+            td:last-child {
+                display: none !important;
+            }
+
+            /* input-urile devin text */
+            input {
+                border: none !important;
+                background: transparent !important;
+                pointer-events: none !important;
+                width: auto !important;
+            }
+
+            /* tabel invizibil la print */
+            table,
+            th,
+            td {
+                border: none !important;
+            }
+
+            .page {
+                margin: 0 !important;
+                padding: 12mm !important;
+                box-shadow: none !important;
+                page-break-after: avoid !important;
+            }
+
+            .watermark {
+                position: fixed !important;
+                top: 55mm !important;
+                left: 30mm !important;
+                width: 150mm !important;
+                opacity: 0.08 !important;
+            }
+
+								/* FIX DISCOUNT */
+            .discount-line {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .discount-line .label {
+                display: inline-block;
+                width: auto;
+            }
+
+            .discount-line input {
+                width: 50px;
+            }
+
+								/* PRINT FIX */
+            @media print {
+                .totals-box .discount-line input {
+                    width: 38px !important;
+                    /* mai mic */
+                    text-align: left;
+                    margin-left: 2px;
+                    /* apropie % */
+                }
+
+                .discount-line {
+                    gap: 2px;
+                }
+
+                .title-deviz {
+                    font-size: 16px;
+                    font-weight: bold;
+                    margin-bottom: 25px;
+                    display: block;
+                    text-align: left;
+                    margin-left: 80px;
+                }
+
+                .discount-line input {
+                    width: 28px !important;
+                    padding: 0 !important;
+                    margin: 0 2px 0 2px !important;
+                    text-align: center;
+                }
+            }
+    </style>
+</head>
+
+<body>
+
+    <!-- BUTOANE -->
+    <div class="btn-container">
+        <button class="btn btn-print" onclick="window.print()">Printează PDF</button>
+        <button class="btn btn-add" onclick="addRow()">+ Adaugă Rând</button>
+        <button class="btn btn-clear" onclick="clearAll()">Șterge tot devizul</button>
+		
+		 <a href="../../index.html" class="btn btn-back">Înapoi la HUB</a>
+    </div>
+
+    <!-- PAGINA -->
+    <div class="page">
+
+        <img src="logo.png" class="watermark">
+
+        <span class="title-deviz">🛠️ DEVIZ REPARAȚIE <br><br></span>
+
+        <div class="info-section">
+            <div><strong>Autovehicul:</strong> <input type="text" value=""></div>
+            <div><strong>Motorizare:</strong> <input type="text" value=""></div>
+            <div><strong>Nr. înmatriculare:</strong> <input type="text" value=""></div>
+        </div>
+
+        <div class="section-line"></div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:70%">Piesă / Serviciu</th>
+                    <th style="width:10%">Cantitate</th>
+                    <th style="width:10%">Preț unitar (RON)</th>
+                    <th style="width:10%">Total (RON)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="itemsBody">
+                <tr>
+                    <td><input type="text" value=""></td>
+                    <td><input type="number" class="qty" oninput="calculate()"></td>
+                    <td><input type="number" class="price" oninput="calculate()"></td>
+                    <td class="row-total"></td>
+                    <td><button class="delete-btn" onclick="deleteRow(this)">✖</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-line"></div>
+
+        <div class="totals-box">
+
+            <div class="total-block">
+                <span class="label">💰 Subtotal piese:</span>
+                <span class="value" id="subtotal">0.00 RON</span>
+            </div>
+
+            <div class="total-block">
+
+                <div class="discount-line">
+                    <span class="label">🔻 Discount :</span>
+                    <input type="number" id="discountPercent" value="0" oninput="calculate()">
+                    <span>%</span>
+                </div>
+
+                <span class="value" id="discount">0.00 RON</span>
+
+            </div>
+
+            <div class="total-block total-final">
+                <span class="label">✅ TOTAL piese după discount:</span>
+                <span class="value" id="grandTotal">0.00 RON</span>
+            </div>
+
+        </div>
+
+        <div class="section-line"></div>
+
+        <div class="observatii">
+            <p class="obs-title">⚠️ Observații</p>
+
+            <ul class="obs-list">
+                <li>După demontare pot apărea piese suplimentare uzate.</li>
+                <li>Orice intervenție suplimentară se face doar cu acordul clientului.</li>
+            </ul>
+
+            <p class="obs-small">
+                - Prezentul document reprezintă un deviz estimativ de constatare, întocmit pe baza verificărilor preliminare.
+                - În urma demontării sau a verificărilor suplimentare pot fi identificate defecțiuni ori piese suplimentare, caz în care devizul va fi actualizat, cu informarea prealabilă a clientului.
+                - Prețurile sunt orientative și pot varia în funcție de piață și disponibilitatea pieselor. Devizul este calculat pentru piese NOI și/sau SH, la prețurile pieței, în urma verificării.
+                - Manopera nu este inclusă, decât dacă este menționată explicit.
+                - Prezentul document nu constituie ofertă ferma, ci o evaluare preliminară. Lucrările se efectuează doar cu acordul clientului.
+            </p>
+        </div>
+		
+</div> <!-- end .module-page -->
+
+ 
+
+    <script>
+        function addRow() {
+            const tbody = document.getElementById('itemsBody');
+            const tr = document.createElement('tr');
+
+            tr.innerHTML = `
+        <td><input type="text" placeholder="..."></td>
+        <td><input type="number" class="qty" oninput="calculate()"></td>
+        <td><input type="number" class="price" oninput="calculate()"></td>
+        <td class="row-total"></td>
+        <td><button class="delete-btn" onclick="deleteRow(this)">✖</button></td>
+    `;
+
+            tbody.appendChild(tr);
+        }
+
+        function deleteRow(button) {
+            button.parentNode.parentNode.remove();
+            calculate();
+        }
+
+        function clearAll() {
+            // Șterge rândurile din tabel
+            document.getElementById('itemsBody').innerHTML = "";
+            document.getElementById('subtotal').innerText = "0.00 RON";
+            document.getElementById('discount').innerText = "0.00 RON";
+            document.getElementById('grandTotal').innerText = "0.00 RON";
+            // Șterge câmpurile de sus (Autovehicul, Motorizare, Nr. înmatriculare)
+            document.querySelectorAll('.info-section input').forEach(i => i.value = "");
+        }
+
+        function calculate() {
+            let subtotal = 0;
+            const rows = document.querySelectorAll('#itemsBody tr');
+
+            rows.forEach(row => {
+                const qty = parseFloat(row.querySelector('.qty').value);
+                const price = parseFloat(row.querySelector('.price').value);
+                const totalCell = row.querySelector('.row-total');
+
+                if (!isNaN(qty) && qty > 0) {
+                    const rowTotal = qty * (isNaN(price) ? 0 : price);
+                    totalCell.innerText = rowTotal.toFixed(2);
+                    subtotal += rowTotal;
+                } else {
+                    totalCell.innerText = "";
+                }
+            });
+
+            const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+            const discount = subtotal * (discountPercent / 100);
+            const grandTotal = subtotal - discount;
+
+            document.getElementById('subtotal').innerText = subtotal.toFixed(2) + " RON";
+            document.getElementById('discount').innerText = "-" + discount.toFixed(2) + " RON";
+            document.getElementById('grandTotal').innerText = grandTotal.toFixed(2) + " RON";
+        }
+    </script>
+
+</body>
+
+</html>
