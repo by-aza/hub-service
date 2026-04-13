@@ -1,23 +1,125 @@
-
 <!DOCTYPE html>
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>Adauga</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    <title>Adaugă mașină</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #6a0dad;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .btn-full {
+            width: 100%;
+            background-color: #6a0dad;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        .btn-full:hover {
+            background-color: #580b9e;
+        }
+
+        .back {
+            margin-top: 20px;
+            display: inline-block;
+            color: #6a0dad;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
 
-<header class="module-header">
-    <h2>Modul: <span class="module-name">Adauga</span></h2>
-</header>
-<header class="module-header">
-    <div class="module-page">
-        <h1>Adauga</h1>
-        <p>Aici vei construi funcționalitatea specifică acestei secțiuni.</p>
+<h2>Adaugă mașină</h2>
 
-        <a href="../../index.html" class="back-btn">Înapoi la HUB</a>
-    </div>
+<form id="formMasina">
+
+    <label>Număr înmatriculare</label>
+    <input type="text" id="nr" required>
+
+    <label>VIN</label>
+    <input type="text" id="vin">
+
+    <label>Marcă vehicul</label>
+    <input type="text" id="marca">
+
+    <label>Data RCA</label>
+    <input type="date" id="rca">
+
+    <label>Data ITP</label>
+    <input type="date" id="itp">
+
+    <label>Data Rovinietă</label>
+    <input type="date" id="rovinieta">
+
+    <label>Link poze Acte (Drive)</label>
+    <input type="text" id="link">
+
+    <label>Observații</label>
+    <textarea id="obs" rows="3"></textarea>
+
+    <button type="button" class="btn-full" onclick="salveazaMasina()">💾 Salvează mașina</button>
+
+</form>
+
+<a href="../../index.html" class="back-btn">Înapoi la HUB</a>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxKVKcMTBqy-OUsgSCxH4iLHgZkpPZSqThbV1oCrjTb9XGYRhu37e6N3IcoKsfpRNsWgg/exec";
+
+    function salveazaMasina() {
+        const data = {
+            nr: document.getElementById("nr").value,
+            vin: document.getElementById("vin").value,
+            marca: document.getElementById("marca").value,
+            rca: document.getElementById("rca").value,
+            itp: document.getElementById("itp").value,
+            rovinieta: document.getElementById("rovinieta").value,
+            link: document.getElementById("link").value,
+            obs: document.getElementById("obs").value
+        };
+
+        fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(r => r.text())
+        .then(r => {
+            alert("Mașina a fost adăugată cu succes!");
+            window.location.href = "index.html";
+        })
+        .catch(err => alert("Eroare la salvare: " + err));
+    }
+</script>
 
 </body>
 </html>

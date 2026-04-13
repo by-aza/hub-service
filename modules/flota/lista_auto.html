@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista Mașini - Flota Auto</title>
+  <link rel="stylesheet" href="../../style.css">
+  <script>
+    async function incarcaMasini() {
+      const raspuns = await fetch("https://script.google.com/macros/s/AKfycbzLjMmg9HuER6P7b_dwpreKUMkAbkMmxl7GWSGmkPJJ2pmr0jVfS9tfJrqw2WJBLWLukw/exec");
+      const masini = await raspuns.json();
+      const container = document.getElementById("lista");
+
+      masini.forEach(m => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        // culoare în funcție de expirare
+        const culoare = m.rca_zile <= 0 || m.itp_zile <= 0 || m.rovinieta_zile <= 0 ? "rosu"
+                        : (m.rca_zile <= 30 || m.itp_zile <= 30 || m.rovinieta_zile <= 30 ? "galben" : "verde");
+
+        card.innerHTML = `
+          <h2>${m.nr}</h2>
+          <p class="vin">VIN: ${m.vin}</p>
+          <p class="${culoare}">ITP: ${m.itp_zile} zile</p>
+          <p class="${culoare}">RCA: ${m.rca_zile} zile</p>
+          <p class="${culoare}">Rovinietă: ${m.rovinieta_zile} zile</p>
+          <p>Observații: ${m.obs}</p>
+          <div class="butoane">
+            <button onclick="modifica(${m.rowIndex})">✏️ Modifică</button>
+            <a href="${m.link}" target="_blank">📁 Acte</a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function modifica(rowIndex) {
+      window.location.href = `modifica.html?row=${rowIndex}`;
+    }
+
+    window.onload = incarcaMasini;
+  </script>
+  <style>
+    body { font-family: Segoe UI, sans-serif; background: #f5f5f5; margin: 0; }
+    header { background: #2B6CBO; color: white; padding: 15px; text-align: center; font-size: 22px; }
+    .card { background: white; margin: 10px auto; padding: 15px; border-radius: 8px; width: 90%; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .vin { font-size: 14px; color: #555; }
+    .verde { color: #2ecc71; }
+    .galben { color: #f1c40f; }
+    .rosu { color: #e74c3c; }
+    .butoane { margin-top: 10px; display: flex; gap: 10px; }
+    button, a { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; }
+    button { background: #2B6CBO; color: white; }
+    a { background: #555; color: white; }
+  </style>
+</head>
+<body>
+  <header>Flota Auto</header>
+  <div id="lista"></div>
+</body>
+</html>
