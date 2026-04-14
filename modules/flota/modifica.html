@@ -124,6 +124,18 @@
         font-size: 16px;
         cursor: pointer;
     }
+	
+	.btn-delete {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    background: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
   </style>
 </head>
 
@@ -168,6 +180,7 @@
       <textarea id="obs"></textarea>
 
       <button class="btn-save" onclick="salveaza()">💾 Salvează modificările</button>
+	  <button class="btn-delete" onclick="sterge()">🗑️ Șterge vehicul</button>
   </div>
 
   <!-- SCRIPT: PRELUARE DATE DIN URL + POPULARE FORM -->
@@ -217,6 +230,25 @@
         alert("Modificările au fost salvate");
         window.location.href = "lista_auto.html";
     }
+	
+	async function sterge() {
+    if (!confirm("Sigur vrei să ștergi acest vehicul?")) return;
+
+    await fetch(
+        "https://script.google.com/macros/s/AKfycbxdlYO9JcT6f0q6hHGUE1XREPL5f9AIpfHQ3hAQa8P9sYtr0S00ZGm_Sl9oMFIFyXPcwQ/exec",
+        {
+            method: "POST",
+            body: JSON.stringify({
+                delete: true,
+                row: row
+            })
+        }
+    );
+
+    alert("Vehiculul a fost șters.");
+    window.location.href = "lista_auto.html";
+}
+	
   </script>
 
   <!-- DARK/LIGHT -->
