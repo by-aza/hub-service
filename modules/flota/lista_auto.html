@@ -1,10 +1,173 @@
-
 <!DOCTYPE html>
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
   <title>Lista Mașini - Flota Auto</title>
   <link rel="stylesheet" href="../../style.css">
+
+  <style>
+    /* ===========================
+       VARIABILE DARK / LIGHT
+    ============================ */
+    :root {
+        --bg: #f5f5f5;
+        --bg-header: #ffffff;
+        --text-header: #1e293b;
+        --btn-bg: #e2e8f0;
+        --btn-text: #1e293b;
+        --card-bg: #ffffff;
+        --card-border: #ddd;
+    }
+
+    .dark {
+        --bg: #0f172a;
+        --bg-header: #1e293b;
+        --text-header: #f8fafc;
+        --btn-bg: #334155;
+        --btn-text: #f8fafc;
+        --card-bg: #1e293b;
+        --card-border: #475569;
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text-header);
+        margin: 0;
+        font-family: Segoe UI, sans-serif;
+    }
+
+    /* ===========================
+       HEADER
+    ============================ */
+    .hub-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: var(--bg-header);
+        color: var(--text-header);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 18px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .hub-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .hub-logo {
+        height: 32px;
+    }
+
+    .hub-title {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .hub-right {
+        display: flex;
+        gap: 10px;
+    }
+
+    .hub-btn {
+        background: var(--btn-bg);
+        color: var(--btn-text);
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    /* ===========================
+       CARDURI MASINI
+    ============================ */
+    .lista-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .card {
+        background: var(--card-bg);
+        border: 2px solid var(--card-border);
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+        margin: 0 0 5px;
+        font-size: 20px;
+    }
+
+    .card p {
+        margin: 4px 0;
+        font-size: 14px;
+    }
+
+    .verde { color: #2ecc71; }
+    .galben { color: #f1c40f; }
+    .rosu { color: #e74c3c; }
+
+    .butoane {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .butoane button,
+    .butoane a {
+        flex: 1;
+        padding: 10px;
+        font-size: 15px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        color: white;
+    }
+
+    .butoane button {
+        background: #2B6CB0;
+    }
+
+    .butoane a {
+        background: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===========================
+       HEADER NOU
+  ============================ -->
+  <header class="hub-header">
+      <div class="hub-left">
+          <img src="../../icons/96x96.png" class="hub-logo" alt="Logo">
+          <span class="hub-title">Flota Auto</span>
+      </div>
+
+      <div class="hub-right">
+          <button class="hub-btn" onclick="location.href='../../index.html'">⟵ Înapoi la HUB</button>
+          <button class="hub-btn" id="themeToggle">🌙</button>
+      </div>
+  </header>
+
+  <!-- ===========================
+       LISTA MASINI
+  ============================ -->
+  <div id="lista" class="lista-container"></div>
+
+  <!-- ===========================
+       SCRIPT ÎNCĂRCARE MASINI
+  ============================ -->
   <script>
     async function incarcaMasini() {
       const raspuns = await fetch("https://script.google.com/macros/s/AKfycbxdlYO9JcT6f0q6hHGUE1XREPL5f9AIpfHQ3hAQa8P9sYtr0S00ZGm_Sl9oMFIFyXPcwQ/exec");
@@ -15,22 +178,30 @@
         const card = document.createElement("div");
         card.className = "card";
 
-        // culoare în funcție de expirare
-        const culoare = m.rca_zile <= 0 || m.itp_zile <= 0 || m.rovinieta_zile <= 0 ? "rosu"
-                        : (m.rca_zile <= 30 || m.itp_zile <= 30 || m.rovinieta_zile <= 30 ? "galben" : "verde");
+        const itp = Number(m.itp_zile) || 0;
+        const rca = Number(m.rca_zile) || 0;
+        const rov = Number(m.rovinieta_zile) || 0;
+
+        const culoare =
+            itp <= 0 || rca <= 0 || rov <= 0 ? "rosu" :
+            (itp <= 30 || rca <= 30 || rov <= 30 ? "galben" : "verde");
+
+        const linkActe = m.link && m.link.startsWith("http") ? m.link : "#";
 
         card.innerHTML = `
           <h2>${m.nr}</h2>
           <p class="vin">VIN: ${m.vin}</p>
-          <p class="${culoare}">ITP: ${m.itp_zile} zile</p>
-          <p class="${culoare}">RCA: ${m.rca_zile} zile</p>
-          <p class="${culoare}">Rovinietă: ${m.rovinieta_zile} zile</p>
-          <p>Observații: ${m.obs}</p>
+          <p class="${culoare}">ITP: ${itp} zile</p>
+          <p class="${culoare}">RCA: ${rca} zile</p>
+          <p class="${culoare}">Rovinietă: ${rov} zile</p>
+          <p>Observații: ${m.obs || "-"}</p>
+
           <div class="butoane">
             <button onclick="modifica(${m.rowIndex})">✏️ Modifică</button>
-            <a href="${m.link || '#'}" target="_blank">📁 Acte</a>
+            <a href="${linkActe}" target="_blank">📁 Acte</a>
           </div>
         `;
+
         container.appendChild(card);
       });
     }
@@ -41,22 +212,15 @@
 
     window.onload = incarcaMasini;
   </script>
-  <style>
-    body { font-family: Segoe UI, sans-serif; background: #f5f5f5; margin: 0; }
-    header { background: #2B6CB0; color: white; padding: 15px; text-align: center; font-size: 22px; }
-    .card { background: white; margin: 10px auto; padding: 15px; border-radius: 8px; width: 90%; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .vin { font-size: 14px; color: #555; }
-    .verde { color: #2ecc71; }
-    .galben { color: #f1c40f; }
-    .rosu { color: #e74c3c; }
-    .butoane { margin-top: 10px; display: flex; gap: 10px; }
-    button, a { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; }
-    button { background: #2B6CB0; color: white; }
-    a { background: #555; color: white; }
-  </style>
-</head>
-<body>
-  <header>Flota Auto</header>
-  <div id="lista"></div>
+
+  <!-- ===========================
+       SCRIPT DARK / LIGHT
+  ============================ -->
+  <script>
+    document.getElementById("themeToggle").onclick = () => {
+        document.body.classList.toggle("dark");
+    };
+  </script>
+
 </body>
 </html>
