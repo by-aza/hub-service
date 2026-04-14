@@ -189,18 +189,24 @@
     const row = Number(params.get("row"));
 
     async function incarca() {
-        const r = await fetch("https://script.google.com/macros/s/AKfycbxdlYO9JcT6f0q6hHGUE1XREPL5f9AIpfHQ3hAQa8P9sYtr0S00ZGm_Sl9oMFIFyXPcwQ/exec");
-        const masini = await r.json();
-        const m = masini.find(x => x.rowIndex == row);
+    const t = await fetch("URL_TAU");
+    const masini = await t.json();
 
-        document.getElementById("nr").value = m.nr;
-        document.getElementById("vin").value = m.vin;
-        document.getElementById("marca").value = m.marca;
-        document.getElementById("itp").value = m.itp_data;
-        document.getElementById("rca").value = m.rca_data;
-        document.getElementById("rov").value = m.rovinieta_data;
-        document.getElementById("obs").value = m.obs;
+    const m = masini.find(x => Number(x.rowIndex) === row);
+
+    if (!m) {
+        alert("Eroare: nu am găsit mașina!");
+        return;
     }
+
+    document.getElementById("nr").value = m.nr;
+    document.getElementById("vin").value = m.vin;
+    document.getElementById("marca").value = m.marca;
+    document.getElementById("itp").value = m.itp;
+    document.getElementById("rca").value = m.rca;
+    document.getElementById("rov").value = m.rovinieta;
+    document.getElementById("obs").value = m.obs;
+}
 
     incarca();
   </script>
