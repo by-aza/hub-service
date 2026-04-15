@@ -264,40 +264,48 @@
 }
 
 /* ===========================
-   CARDURI DOAR DARK MODE
-   (indiferent de tema site-ului)
+   CARDURI DARK SUPER LIZIBILE
 =========================== */
 
 .card {
-    background: rgba(30, 41, 59, 0.85); /* fundal închis, clar */
-    color: #f8fafc; /* text alb-alb */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: #1e293b; /* albastru închis solid – contrast excelent */
+    color: #ffffff;      /* text alb puternic */
     border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 16px;
+    border: 1px solid #334155; /* contur discret */
     box-shadow: 0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Hover */
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 0 18px rgba(255,255,255,0.25);
+/* Text mai clar */
+.card .linie span,
+.card .linie b,
+.card .vin,
+.card .nr,
+.card .obs {
+    color: #ffffff;
+    font-weight: 600;
 }
 
-/* NEON BORDERS */
+/* ===========================
+   BORDERE COLORATE (vizibile)
+=========================== */
+
 .verde {
     border-left: 8px solid #22ff88;
-    box-shadow: 0 0 12px #22ff88;
 }
 
 .galben {
     border-left: 8px solid #ffe666;
-    box-shadow: 0 0 12px #ffe666;
 }
 
 .rosu {
     border-left: 8px solid #ff4444;
-    box-shadow: 0 0 12px #ff4444;
+}
+
+/* Hover simplu, fără glow */
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45);
 }
 
   </style>
