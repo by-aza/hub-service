@@ -300,17 +300,24 @@ async function incarcaMasini() {
     const card = document.createElement("div");
     card.className = "card";
 
-    // Normalizează valorile
-    const itp = (m.zile_itp === "" || m.zile_itp === null || m.zile_itp === undefined) ? "-" : m.zile_itp;
-    const rca = (m.zile_rca === "" || m.zile_rca === null || m.zile_rca === undefined) ? "-" : m.zile_rca;
-    const rov = (m.zile_rov === "" || m.zile_rov === null || m.zile_rov === undefined) ? "-" : m.zile_rov;
+    // Convertim corect valorile
+    function normalize(val) {
+      if (val === "" || val === null || val === undefined) return "-";
+      if (typeof val === "string" && val.trim() === "") return "-";
+      if (!isNaN(Number(val))) return Number(val);
+      return "-";
+    }
+
+    const itp = normalize(m.zile_itp);
+    const rca = normalize(m.zile_rca);
+    const rov = normalize(m.zile_rov);
 
     // Culoare card
-    const valori = [itp, rca, rov].map(v => parseInt(v, 10));
-    let culoare = "verde";
+    const valori = [itp, rca, rov].filter(v => typeof v === "number");
 
-    if (valori.some(v => !isNaN(v) && v <= 0)) culoare = "rosu";
-    else if (valori.some(v => !isNaN(v) && v <= 30)) culoare = "galben";
+    let culoare = "verde";
+    if (valori.some(v => v <= 0)) culoare = "rosu";
+    else if (valori.some(v => v <= 30)) culoare = "galben";
 
     card.classList.add(culoare);
 
