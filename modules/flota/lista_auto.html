@@ -178,9 +178,9 @@
         const card = document.createElement("div");
         card.className = "card";
 
-        const itp = Number(m.itp_zile) || 0;
-        const rca = Number(m.rca_zile) || 0;
-        const rov = Number(m.rovinieta_zile) || 0;
+        const itp = m.itp || "-";
+		const rca = m.rca || "-";
+		const rov = m.rovinieta || "-";
 
         const culoare =
             itp <= 0 || rca <= 0 || rov <= 0 ? "rosu" :
