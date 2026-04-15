@@ -169,49 +169,58 @@
        SCRIPT ÎNCĂRCARE MASINI
   ============================ -->
   <script>
-    async function incarcaMasini() {
-      const raspuns = await fetch("https://script.google.com/macros/s/AKfycby44VeJwAhO5SDklVUyGB5otT0QBpue_vtfWyFScs5uelDlvIwkbJm6t6nZB1CjDOlW5A/exec");
-      const masini = await raspuns.json();
-      const container = document.getElementById("lista");
+async function incarcaMasini() {
+  const raspuns = await fetch("https://script.google.com/macros/s/AKfycby44VeJwAhO5SDklVUyGB5otT0QBpue_vtfWyFScs5uelDlvIwkbJm6t6nZB1CjDOlW5A/exec");
+  const masini = await raspuns.json();
+  const container = document.getElementById("lista");
 
-      masini.forEach(m => {
-        const card = document.createElement("div");
-        card.className = "card";
+  masini.forEach(m => {
+    const card = document.createElement("div");
+    card.className = "card";
 
-        const itp = m.zile_itp || "-";
-		const rca = m.zile_rca || "-";
-		const rov = m.zile_rov || "-";
+    // Zile rămase
+    const itp = m.zile_itp ?? "-";
+    const rca = m.zile_rca ?? "-";
+    const rov = m.zile_rov ?? "-";
 
-        const culoare =
-            itp <= 0 || rca <= 0 || rov <= 0 ? "rosu" :
-            (itp <= 30 || rca <= 30 || rov <= 30 ? "galben" : "verde");
+    // Culoare card
+    const culoare =
+      itp <= 0 || rca <= 0 || rov <= 0 ? "rosu" :
+      (itp <= 30 || rca <= 30 || rov <= 30 ? "galben" : "verde");
 
-        const linkActe = m.link && m.link.startsWith("http") ? m.link : "#";
+    card.classList.add(culoare);
 
-        card.innerHTML = `
-  <div class="nr">${m.nr}</div>
-  <div class="vin">VIN: ${m.vin}</div>
+    // Link acte
+    const linkActe = m.link && m.link.startsWith("http") ? m.link : "#";
 
-  <div class="itp">ITP: ${m.zile_itp} zile</div>
-  <div class="rca">RCA: ${m.zile_rca} zile</div>
-  <div class="rov">Rovinietă: ${m.zile_rov} zile</div>
+    card.innerHTML = `
+      <div class="nr">${m.nr}</div>
+      <div class="vin">VIN: ${m.vin}</div>
 
-  <div class="obs">Observații: ${m.obs || "-"}</div>
+      <div class="itp">ITP: <b>${itp}</b> zile</div>
+      <div class="rca">RCA: <b>${rca}</b> zile</div>
+      <div class="rov">Rovinietă: <b>${rov}</b> zile</div>
 
-  <button onclick="modifica('${m.rowIndex}')">✏️ Modifică</button>
-  <button onclick="veziActe('${m.link}')">📁 Acte</button>
-`;
+      <div class="obs">Observații: ${m.obs || "-"}</div>
 
-        container.appendChild(card);
-      });
-    }
+      <button onclick="modifica('${m.rowIndex}')">✏️ Modifică</button>
+      <button onclick="veziActe('${linkActe}')">📁 Acte</button>
+    `;
 
-    function modifica(rowIndex) {
-      window.location.href = `modifica.html?row=${rowIndex}`;
-    }
+    container.appendChild(card);
+  });
+}
 
-    window.onload = incarcaMasini;
-  </script>
+function modifica(rowIndex) {
+  window.location.href = `modifica.html?row=${rowIndex}`;
+}
+
+function veziActe(link) {
+  if (link !== "#") window.open(link, "_blank");
+}
+
+window.onload = incarcaMasini;
+</script>
 
 
   <!-- ===========================
