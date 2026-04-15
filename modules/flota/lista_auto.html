@@ -304,17 +304,19 @@ async function incarcaMasini() {
     function normalize(val) {
   if (val === null || val === undefined) return "-";
 
-  // Convertim în string ca să putem curăța
-  val = String(val).trim();
+  // Convertim în string
+  val = String(val);
 
-  // Dacă e gol după trim → "-"
+  // Eliminăm toate spațiile invizibile și normale
+  val = val.replace(/\s+/g, "").trim();
+
+  // Dacă e gol → "-"
   if (val === "") return "-";
 
   // Dacă e număr valid → întoarcem număr
   const nr = Number(val);
   if (!isNaN(nr)) return nr;
 
-  // Orice altceva → "-"
   return "-";
 }
 
