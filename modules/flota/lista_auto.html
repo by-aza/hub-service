@@ -264,42 +264,46 @@
 }
 
 /* ===========================
-   CARDURI GLASS EFFECT
+   CARDURI GLASS NEON
 =========================== */
 .card {
-    background: rgba(255, 255, 255, 0.35); /* transparență */
-    backdrop-filter: blur(10px);           /* blur sticlă */
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
     transition: 0.25s ease;
 }
 
+/* Dark mode glass */
 .dark .card {
-    background: rgba(30, 41, 59, 0.45); /* sticlă în dark mode */
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(30, 41, 59, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* Hover mai elegant */
+/* Hover neon pulse */
 .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 0 18px rgba(255,255,255,0.25);
 }
 
 /* ===========================
-   ACCENTE CULOARE
+   NEON BORDERS
 =========================== */
 .verde {
-    border-left: 8px solid #16a34a; /* verde saturat */
+    border-left: 8px solid #22ff88;
+    box-shadow: 0 0 12px #22ff88;
 }
 
 .galben {
-    border-left: 8px solid #eab308;
+    border-left: 8px solid #ffe666;
+    box-shadow: 0 0 12px #ffe666;
 }
 
 .rosu {
-    border-left: 8px solid #ef4444;
+    border-left: 8px solid #ff4444;
+    box-shadow: 0 0 12px #ff4444;
 }
 
   </style>
