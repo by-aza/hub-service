@@ -307,8 +307,8 @@ async function incarcaMasini() {
   // Convertim în string
   val = String(val);
 
-  // Eliminăm toate spațiile invizibile și normale
-  val = val.replace(/\s+/g, "").trim();
+  // Eliminăm TOATE spațiile, inclusiv cele invizibile
+  val = val.replace(/[\s\u00A0]+/g, "");
 
   // Dacă e gol → "-"
   if (val === "") return "-";
