@@ -2,22 +2,674 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <title>Consumabile</title>
-    <link rel="stylesheet" href="../../css/style.css">
+  <meta charset="UTF-8" />
+  <title>Stoc Consumabile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-elevated: #111827;
+      --card: #020617;
+      --accent-ok: #22c55e;
+      --accent-out: #ef4444;
+      --accent-low: #eab308;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --radius: 10px;
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .page-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .page-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* DASHBOARD CARDS */
+
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .dashboard-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .dashboard-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .dash-card {
+      background: linear-gradient(135deg, #020617, #020617 55%, #111827);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dash-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .dash-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .dash-pill {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .dash-card.ok .dash-value {
+      color: var(--accent-ok);
+    }
+
+    .dash-card.out .dash-value {
+      color: var(--accent-out);
+    }
+
+    .dash-card.low .dash-value {
+      color: var(--accent-low);
+    }
+
+    /* FILTER + SEARCH */
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .filter-btn span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .filter-btn[data-status="all"] span.dot {
+      background: linear-gradient(90deg, var(--accent-ok), var(--accent-low), var(--accent-out));
+    }
+
+    .filter-btn[data-status="ok"] span.dot {
+      background: var(--accent-ok);
+    }
+
+    .filter-btn[data-status="low"] span.dot {
+      background: var(--accent-low);
+    }
+
+    .filter-btn[data-status="out"] span.dot {
+      background: var(--accent-out);
+    }
+
+    .filter-btn.active {
+      border-color: var(--accent-low);
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #1f2937, #020617);
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 160px;
+      max-width: 260px;
+    }
+
+    .search-input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      padding: 7px 12px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* TABLE / LISTA PRODUSE */
+
+    .table-card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 200px;
+    }
+
+    .table-header {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-header span.count {
+      font-size: 0.8rem;
+    }
+
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 70vh;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .product-row {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+      gap: 8px;
+      padding: 8px 9px;
+      border-radius: 8px;
+      background: radial-gradient(circle at top left, #020617, #020617 55%, #020617);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      align-items: center;
+      transition: border-color 0.15s, background 0.15s, transform 0.08s;
+    }
+
+    .product-row:hover {
+      border-color: #4b5563;
+      background: radial-gradient(circle at top left, #020617, #020617 40%, #111827);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 700px) {
+      .product-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .prod-main {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .prod-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .prod-code {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .prod-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-top: 2px;
+    }
+
+    .badge-status {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-status.ok {
+      border-color: rgba(34, 197, 94, 0.4);
+      color: var(--accent-ok);
+      background: rgba(22, 163, 74, 0.08);
+    }
+
+    .badge-status.out {
+      border-color: rgba(239, 68, 68, 0.4);
+      color: var(--accent-out);
+      background: rgba(185, 28, 28, 0.08);
+    }
+
+    .badge-status.low {
+      border-color: rgba(234, 179, 8, 0.4);
+      color: var(--accent-low);
+      background: rgba(202, 138, 4, 0.08);
+    }
+
+    .badge-status .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .prod-stock {
+      font-size: 0.8rem;
+      color: var(--text-main);
+    }
+
+    .prod-stock strong {
+      font-size: 0.95rem;
+    }
+
+    .prod-right {
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    @media (max-width: 700px) {
+      .prod-right {
+        text-align: left;
+      }
+    }
+
+    .pill-small {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .pill-small span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent-ok);
+    }
+
+    .empty-state {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 10px 4px;
+    }
+  </style>
 </head>
 <body>
+  <div class="page">
+    <header class="page-header">
+      <div class="page-title">Stoc consumabile</div>
+      <div class="page-subtitle">Vizualizare rapidă pentru colegi — date live din Google Sheets (tabul STOC).</div>
+    </header>
 
-<header class="module-header">
-    <h2>Modul: <span class="module-name">Consumabile</span></h2>
-</header>
-<header class="module-header">
-    <div class="module-page">
-        <h1>Consumabile</h1>
-        <p>Aici vei construi funcționalitatea specifică acestei secțiuni.</p>
+    <div class="layout">
+      <!-- DASHBOARD -->
+      <section class="dashboard">
+        <div class="dashboard-row">
+          <div class="dash-card ok" id="card-ok">
+            <div class="dash-label">Produse OK</div>
+            <div class="dash-value" id="count-ok">0</div>
+            <div class="dash-pill">stoc &gt; 0</div>
+          </div>
+          <div class="dash-card out" id="card-out">
+            <div class="dash-label">Produse OUT</div>
+            <div class="dash-value" id="count-out">0</div>
+            <div class="dash-pill">stoc = 0</div>
+          </div>
+        </div>
 
-        <a href="../../index.html" class="back-btn">Înapoi la HUB</a>
+        <div class="dashboard-row">
+          <div class="dash-card low" id="card-low">
+            <div class="dash-label">Produse LOW</div>
+            <div class="dash-value" id="count-low">0</div>
+            <div class="dash-pill">logică LOW o definim ulterior</div>
+          </div>
+          <div class="dash-card" id="card-total">
+            <div class="dash-label">Total produse</div>
+            <div class="dash-value" id="count-total">0</div>
+            <div class="dash-pill">înregistrate în tabul STOC</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="filters">
+            <button class="filter-btn active" data-status="all">
+              <span class="dot"></span> Toate
+            </button>
+            <button class="filter-btn" data-status="ok">
+              <span class="dot"></span> OK
+            </button>
+            <button class="filter-btn" data-status="low">
+              <span class="dot"></span> LOW
+            </button>
+            <button class="filter-btn" data-status="out">
+              <span class="dot"></span> OUT
+            </button>
+          </div>
+          <div class="search-box">
+            <input
+              type="text"
+              class="search-input"
+              id="search-input"
+              placeholder="Caută după denumire sau cod..."
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- LISTA PRODUSE -->
+      <section class="table-card">
+        <div class="table-header">
+          <span>Produse pe stoc</span>
+          <span class="count" id="visible-count">0 produse afișate</span>
+        </div>
+        <div class="product-list" id="product-list">
+          <div class="empty-state">Se încarcă datele din Google Sheets...</div>
+        </div>
+      </section>
     </div>
+  </div>
 
+  <script>
+  /* ============================================================
+     NOTE 1 — URL-ul CSV PUBLIC (funcționează 100%)
+     Dacă se schimbă fișierul sau tabul, modifici DOAR această linie.
+     ============================================================ */
+  const CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7mX8RLv-YJ8OU0zCF3Kt6khLDosTW5wAZJ6Ba83Xd8U24gNqXIupTdwJl_j3tftiOdfAqo2E1cPeL/pub?gid=906891078&single=true&output=csv";
+
+  /* Variabile interne */
+  let allProducts = [];
+  let currentFilter = "all";
+  let currentSearch = "";
+
+  /* ============================================================
+     NOTE 2 — PARSARE CSV
+     Aici se mapează coloanele din tabul STOC:
+     A = Cod Produs
+     B = Denumire
+     C = Total IN
+     D = Total OUT
+     E = Stoc Actual
+     ============================================================ */
+  function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+
+    const rows = lines.map((line) =>
+      line
+        .split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
+        .map((c) => c.replace(/^"|"$/g, ""))
+    );
+
+    const header = rows.shift() || [];
+
+    const idxCode = header.findIndex((h) =>
+      h.toLowerCase().includes("cod")
+    );
+    const idxName = header.findIndex((h) =>
+      h.toLowerCase().includes("denum")
+    );
+    const idxStock = header.findIndex((h) =>
+      h.toLowerCase().includes("stoc")
+    );
+
+    return rows
+      .map((cols) => {
+        const code = cols[idxCode] || "";
+        const name = cols[idxName] || "";
+        const stock = Number((cols[idxStock] || "0").replace(",", ".")) || 0;
+        return { code, name, stock };
+      })
+      .filter((p) => p.name || p.code);
+  }
+
+  /* ============================================================
+     NOTE 3 — LOGICĂ STATUS
+     OUT = stoc 0
+     OK  = stoc > 0
+     LOW = îl activăm când introduci un prag minim în sheet
+     ============================================================ */
+  function computeStatus(product) {
+    if (product.stock <= 0) return "out";
+    return "ok";
+  }
+
+  /* ============================================================
+     NOTE 4 — RENDER LISTĂ PRODUSE
+     Aici controlezi cum arată fiecare produs în listă.
+     ============================================================ */
+  function render() {
+    const listEl = document.getElementById("product-list");
+    const visibleCountEl = document.getElementById("visible-count");
+
+    listEl.innerHTML = "";
+
+    const filtered = allProducts.filter((p) => {
+      const status = computeStatus(p);
+
+      if (currentFilter !== "all" && status !== currentFilter) return false;
+
+      if (currentSearch) {
+        const q = currentSearch.toLowerCase();
+        if (
+          !p.name.toLowerCase().includes(q) &&
+          !p.code.toLowerCase().includes(q)
+        ) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    if (!filtered.length) {
+      listEl.innerHTML =
+        '<div class="empty-state">Niciun produs nu corespunde filtrului curent.</div>';
+    } else {
+      filtered.forEach((p) => {
+        const status = computeStatus(p);
+
+        const row = document.createElement("div");
+        row.className = "product-row";
+
+        row.innerHTML = `
+          <div class="prod-main">
+            <div class="prod-name">${p.name}</div>
+
+            <div class="prod-meta">
+              <span class="badge-status ${status}">
+                <span class="dot"></span>
+                ${status.toUpperCase()}
+              </span>
+
+              <span class="prod-stock">
+                Stoc: <strong>${p.stock}</strong> buc
+              </span>
+            </div>
+
+            <div class="prod-code">Cod produs: ${p.code}</div>
+          </div>
+
+          <div class="prod-right">
+            <span class="pill-small">
+              <span class="dot"></span>
+              vizualizare rapidă
+            </span>
+          </div>
+        `;
+
+        listEl.appendChild(row);
+      });
+    }
+
+    visibleCountEl.textContent = `${filtered.length} produse afișate`;
+  }
+
+  /* ============================================================
+     NOTE 5 — DASHBOARD (cardurile OK / OUT / TOTAL)
+     ============================================================ */
+  function updateDashboard() {
+    const total = allProducts.length;
+    let ok = 0;
+    let out = 0;
+
+    allProducts.forEach((p) => {
+      const status = computeStatus(p);
+      if (status === "ok") ok++;
+      if (status === "out") out++;
+    });
+
+    document.getElementById("count-total").textContent = total;
+    document.getElementById("count-ok").textContent = ok;
+    document.getElementById("count-out").textContent = out;
+    document.getElementById("count-low").textContent = 0; // LOW vine mai târziu
+  }
+
+  /* ============================================================
+     NOTE 6 — FILTRE + SEARCH
+     ============================================================ */
+  function setFilter(status) {
+    currentFilter = status;
+    document
+      .querySelectorAll(".filter-btn")
+      .forEach((btn) => btn.classList.remove("active"));
+    document
+      .querySelector(`.filter-btn[data-status="${status}"]`)
+      ?.classList.add("active");
+    render();
+  }
+
+  function initEvents() {
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setFilter(btn.getAttribute("data-status"));
+      });
+    });
+
+    document.getElementById("search-input").addEventListener("input", (e) => {
+      currentSearch = e.target.value.trim();
+      render();
+    });
+  }
+
+  /* ============================================================
+     NOTE 7 — ÎNCĂRCARE DATE DIN GOOGLE SHEETS
+     ============================================================ */
+  async function loadData() {
+    try {
+      const res = await fetch(CSV_URL);
+
+      if (!res.ok) throw new Error("HTTP " + res.status);
+
+      const text = await res.text();
+      allProducts = parseCSV(text);
+
+      updateDashboard();
+      render();
+    } catch (err) {
+      console.error("Eroare CSV:", err);
+      document.getElementById("product-list").innerHTML =
+        '<div class="empty-state">Eroare la încărcarea datelor din Google Sheets.</div>';
+    }
+  }
+
+  /* ============================================================
+     NOTE 8 — START
+     ============================================================ */
+  initEvents();
+  loadData();
+</script>
 </body>
 </html>

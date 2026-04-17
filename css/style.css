@@ -1,4 +1,3 @@
-
 /* ============================================================
    NOTE 1 — RESET + FONT + BAZĂ GLOBALĂ
    ============================================================ */
@@ -9,9 +8,22 @@
     font-family: "Segoe UI", sans-serif;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
-    background: #f5f6fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     color: #1a1a1a;
+}
+
+/* FUNDAL ABSTRACT – LIGHT MODE */
+body {
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9), rgba(240,240,255,0.7)),
+                radial-gradient(circle at 80% 80%, rgba(220,240,255,0.6), rgba(255,255,255,0.8));
+    background-attachment: fixed;
 }
 
 /* ============================================================
@@ -43,23 +55,9 @@ body {
     --shadow-soft: 0 3px 8px rgba(0,0,0,0.12);
 }
 
-
-
 /* ============================================================
    NOTE 3 — HEADER (LOGO + TITLU)
    ============================================================ */
-.hub-header {
-    text-align: center;
-    padding: var(--space-xl) var(--space-m) var(--space-l);
-}
-
-.hub-logo {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: var(--space-s);
-}
-
-
 header {
     position: relative;
 }
@@ -71,11 +69,56 @@ header::after {
     left: 0;
     width: 100%;
     height: 2px;
-    background: rgba(180, 80, 255, 0.9); /* mov intens */
+    background: rgba(180, 80, 255, 0.9);
     box-shadow: 0 0 12px rgba(180, 80, 255, 0.7);
 }
 
+/* Header glass */
+.hub-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    position: relative;
+}
 
+.hub-header h1 {
+    font-size: 1.8rem;
+}
+
+/* LOGO – efect premium (Glow + Glass Ring) */
+.hub-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 4px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(6px);
+    transition: 0.25s ease;
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
+}
+
+.hub-logo:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 14px rgba(0,0,0,0.25);
+}
+
+/* Buton toggle */
+.theme-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: inherit;
+}
 
 /* ============================================================
    NOTE 4 — GRID PRINCIPAL (LAYOUT)
@@ -89,8 +132,6 @@ header::after {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
-
-
 /* ============================================================
    NOTE 5 — SECTIUNI (FUNDAL + TITLU)
    ============================================================ */
@@ -102,9 +143,9 @@ header::after {
 }
 
 /* Culori pe secțiuni */
-.hub-section[data-section="devize"]  { background: var(--blue); }
-.hub-section[data-section="stocuri"] { background: var(--green); }
-.hub-section[data-section="flota"]   { background: var(--orange); }
+.hub-section[data-section="devize"]    { background: var(--blue); }
+.hub-section[data-section="stocuri"]   { background: var(--green); }
+.hub-section[data-section="flota"]     { background: var(--orange); }
 .hub-section[data-section="formulare"] { background: var(--gray); }
 
 .hub-section h2 {
@@ -113,10 +154,8 @@ header::after {
     font-weight: 600;
 }
 
-
-
 /* ============================================================
-   NOTE 6 — LISTA DE CARDURI (FĂRĂ DESIGN ÎNCĂ)
+   NOTE 6 — LISTA DE CARDURI
    ============================================================ */
 .hub-cards {
     display: flex;
@@ -124,14 +163,6 @@ header::after {
     gap: var(--space-m);
 }
 
-/* Cardurile vor fi stilizate în ETAPA 3 */
-.hub-card {
-    display: flex;
-    align-items: center;
-    gap: var(--space-m);
-    text-decoration: none;
-    color: var(--text-light);
-}
 /* ============================================================
    NOTE 7 — CARDURI (DESIGN COMPLET)
    ============================================================ */
@@ -140,36 +171,18 @@ header::after {
     align-items: center;
     gap: var(--space-m);
     padding: var(--space-m) var(--space-l);
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.35);
     border-radius: var(--radius-m);
     text-decoration: none;
     color: var(--text-light);
     font-size: 16px;
     font-weight: 500;
-    transition: 0.25s ease;
-    backdrop-filter: blur(2px);
+    transition: all 0.25s ease;
+    backdrop-filter: blur(6px);
     cursor: pointer;
 }
 
-/* Hover modern */
-.hub-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    background: rgba(255, 255, 255, 0.45);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.18);
-    backdrop-filter: blur(14px);
-}
-
-/* Efect de apăsare */
-.hub-card:active {
-    transform: translateY(0px) scale(0.98);
-    background: rgba(255, 255, 255, 0.18);
-}
-
-
-
-/* ============================================================
-   NOTE 8 — ICONIȚE SVG (STRUCTURĂ + DIMENSIUNI)
-   ============================================================ */
+/* Icon + text */
 .hub-icon {
     width: 26px;
     height: 26px;
@@ -178,30 +191,61 @@ header::after {
     justify-content: center;
 }
 
-/* SVG-urile vor fi injectate aici în Etapa 3.1 */
 .hub-icon svg {
     width: 100%;
     height: 100%;
     fill: white;
+    stroke: #1e293b;
 }
 
-
-
-/* ============================================================
-   NOTE 9 — LABEL CARD (TEXT)
-   ============================================================ */
 .hub-label {
     font-size: 16px;
     line-height: 1;
 }
 
+/* Hover modern */
+.hub-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    background: rgba(255, 255, 255, 0.45);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+    backdrop-filter: blur(14px);
+}
+
+/* Efect de apăsare */
+.hub-card:active {
+    transform: translateY(0px) scale(0.98);
+    background: rgba(255, 255, 255, 0.20);
+}
 
 /* ============================================================
-   NOTE 10 — RESPONSIVE: BREAKPOINT 1024px (TABLETĂ LANDSCAPE)
+   NOTE 8 — RESPONSIVE BREAKPOINTS
    ============================================================ */
+
+/* 1600px — reorganizare mai devreme */
+@media (max-width: 1600px) {
+    .hub-container {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+}
+
+/* 1400px – reorganizare mai devreme */
+@media (max-width: 1400px) {
+    .hub-container {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+}
+
+/* 1200px – trece pe 2 coloane */
+@media (max-width: 1200px) {
+    .hub-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 1024px – tabletă landscape */
 @media (max-width: 1024px) {
     .hub-container {
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: var(--space-m);
     }
 
@@ -210,10 +254,14 @@ header::after {
     }
 }
 
+/* 900px – ajustare suplimentară */
+@media (max-width: 900px) {
+    .hub-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
-/* ============================================================
-   NOTE 11 — RESPONSIVE: BREAKPOINT 768px (TABLETĂ PORTRET)
-   ============================================================ */
+/* 768px – tabletă portret */
 @media (max-width: 768px) {
     .hub-header h1 {
         font-size: 22px;
@@ -233,373 +281,83 @@ header::after {
     }
 }
 
+/* 600px – 1 coloană */
+@media (max-width: 600px) {
+    .hub-container {
+        grid-template-columns: 1fr;
+    }
+}
 
-/* ============================================================
-   NOTE 12 — RESPONSIVE: BREAKPOINT 480px (MOBIL)
-   ============================================================ */
+/* 600px – telefon mare */
+@media (max-width: 600px) {
+    .hub-container {
+        grid-template-columns: 1fr;
+        padding: var(--space-m);
+        gap: var(--space-m);
+    }
+
+    .hub-card {
+        font-size: 0.95rem;
+        padding: 12px;
+    }
+
+    .hub-logo {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* 480px – telefon mic */
 @media (max-width: 480px) {
-
-    /* GRID devine pe 1 coloană */
     .hub-container {
         grid-template-columns: 1fr;
         gap: var(--space-l);
         padding: var(--space-m);
     }
 
-    /* Secțiunile devin mai compacte */
     .hub-section {
         padding: var(--space-m);
         border-radius: var(--radius-m);
     }
 
-    /* Cardurile devin mai compacte */
     .hub-card {
         padding: var(--space-m);
         gap: var(--space-s);
     }
 
-    /* Iconițele se micșorează */
     .hub-icon {
         width: 20px;
         height: 20px;
     }
 
-    /* Text mai mic pe mobil */
     .hub-label {
         font-size: 14px;
     }
 
-    /* Titlul principal */
     .hub-header h1 {
         font-size: 20px;
         padding: 0 var(--space-m);
     }
 }
 
-
 /* ============================================================
-   NOTE 13 — MICRO-INTERACȚIUNI: HOVER ELEGANT
+   NOTE 9 — DARK MODE
    ============================================================ */
-.hub-card {
-    transition: 
-        background 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        opacity 0.25s ease;
-}
-
-/* Hover: cardul se ridică ușor și devine mai luminos */
-.hub-card:hover {
-    background: rgba(255, 255, 255, 0.28);
-    transform: translateY(-4px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.22);
-}
-
-
-
-/* ============================================================
-   NOTE 14 — MICRO-INTERACȚIUNI: EFECT DE APĂSARE
-   ============================================================ */
-.hub-card:active {
-    transform: translateY(0px) scale(0.97);
-    background: rgba(255, 255, 255, 0.20);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
-}
-
-
-
-/* ============================================================
-   NOTE 15 — MICRO-INTERACȚIUNI: ANIMAȚIE DE INTRARE
-   ============================================================ */
-
-/* Animație pentru apariția cardurilor */
-@keyframes hubFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Aplicăm animația fiecărui card */
-.hub-card {
-    animation: hubFadeIn 0.4s ease forwards;
-    opacity: 0; /* inițial invizibil */
-}
-
-/* Delay progresiv pentru fiecare card (efect de „cascade”) */
-.hub-card:nth-child(1) { animation-delay: 0.05s; }
-.hub-card:nth-child(2) { animation-delay: 0.10s; }
-.hub-card:nth-child(3) { animation-delay: 0.15s; }
-.hub-card:nth-child(4) { animation-delay: 0.20s; }
-.hub-card:nth-child(5) { animation-delay: 0.25s; }
-.hub-card:nth-child(6) { animation-delay: 0.30s; }
-.hub-card:nth-child(7) { animation-delay: 0.35s; }
-.hub-card:nth-child(8) { animation-delay: 0.40s; }
-.hub-card:nth-child(9) { animation-delay: 0.45s; }
-.hub-card:nth-child(10){ animation-delay: 0.50s; }
-
-/* HOVER PREMIUM PENTRU CARDURI */
-.hub-card {
-    transition: all 0.25s ease;
-    cursor: pointer;
-}
-
-/* Hover efect premium */
-.hub-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    background: rgba(255, 255, 255, 0.45);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.18);
-    backdrop-filter: blur(14px);
-}
-
-body.dark-mode .hub-card:hover {
-    background: rgba(51, 65, 85, 0.55);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.55);
-}
-
-
-
-/* ============================================================
-   NOTE 16 — BUTON ÎNAPOI LA HUB
-   ============================================================ */
-.back-btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 18px;
-    background: var(--blue);
-    color: white;
-    border-radius: var(--radius-m);
-    text-decoration: none;
-    font-weight: 500;
-    transition: 0.25s ease;
-}
-
-.back-btn:hover {
-    background: #1e4f80;
-}
-
-/* ============================================================
-   NOTE 17 — ANTET PENTRU PAGINILE INTERNE
-   ============================================================ */
-.module-header {
-    background: rgba(255, 255, 255, 0.15);
-    padding: 15px 25px;
-    margin-bottom: 20px;
-    border-radius: var(--radius-m);
-    backdrop-filter: blur(4px);
-}
-
-.module-header h2 {
-    margin: 0;
-    font-size: 20px;
-    color: white;
-    font-weight: 500;
-}
-
-.module-header .module-name {
-    font-weight: 600;
-}
-
-
-/* ============================================================
-   NOTE 18 — PRINTARE DEVIZ
-   ============================================================ */
-
-@media print {
-
-    /* Ascunde TOT layout-ul HUB-ului */
-    body * {
-        visibility: hidden !important;
-    }
-
-    /* Arată DOAR devizul */
-    .page, .page * {
-        visibility: visible !important;
-    }
-
-    /* Devizul trebuie să fie pe toată pagina */
-    .page {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background: white !important;
-    }
-
-    /* Ascundem butoanele */
-    .btn-container {
-        display: none !important;
-    }
-
-    /* Ascundem antetul modulului */
-    .module-header {
-        display: none !important;
-    }
-
-    /* Ascundem butonul Înapoi la HUB */
-    .back-btn {
-        display: none !important;
-    }
-}
-
-
-/* === FIX PRINTARE DEVIZ ÎN HUB === */
-
-@media print {
-
-    /* Ascunde TOT în afară de deviz */
-    body * {
-        visibility: hidden !important;
-    }
-
-    /* Arată DOAR devizul */
-    .page, .page * {
-        visibility: visible !important;
-    }
-
-    /* Devizul trebuie să fie poziționat corect pe foaie */
-    .page {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        background: white !important;
-        margin: 0 !important;
-        padding: 12mm !important;
-    }
-
-    /* Ascundem antetul modulului */
-    .module-header {
-        display: none !important;
-    }
-
-    /* Ascundem butonul Înapoi la HUB */
-    .back-btn {
-        display: none !important;
-    }
-	
-	}
-	/* === FIX PRINTARE DEVIZ ÎN HUB === */
-@media print {
-    body * {
-        visibility: hidden !important;
-    }
-    .page, .page * {
-        visibility: visible !important;
-    }
-    .page {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        background: white !important;
-        margin: 0 !important;
-        padding: 12mm !important;
-    }
-    .module-header,
-    .back-btn,
-    .btn-container {
-        display: none !important;
-    }
-
-}
-
-/* ------------------------- */
-/*      DARK MODE            */
-/* ------------------------- */
 
 body.dark-mode {
-    background: #0f172a;
+    background: radial-gradient(circle at 20% 20%, rgba(30,41,59,0.9), rgba(15,23,42,0.9)),
+                radial-gradient(circle at 80% 80%, rgba(51,65,85,0.6), rgba(15,23,42,1));
+    background-attachment: fixed;
     color: #e2e8f0;
-}
-
-/* Buton toggle */
-.theme-toggle {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    color: inherit;
 }
 
 /* Header în dark mode */
 body.dark-mode .hub-header {
-    background: #1e293b;
-    color: #e2e8f0;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-/* Carduri în dark mode */
-body.dark-mode .hub-card {
-    background: #1e293b;
-    color: #e2e8f0;
-    border: 1px solid rgba(255,255,255,0.05);
-}
-
-body.dark-mode .hub-card:hover {
-    background: #334155;
-    transform: translateY(-3px);
-}
-
-
-}
-
-body.dark-mode .hub-header {
     background: rgba(30, 41, 59, 0.45);
     border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: #e2e8f0;
 }
 
-body.dark-mode .hub-logo {
-    filter: brightness(0.9);
-}
-
-
-/* Header glass */
-.hub-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px 25px;
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,0.25);
-    position: relative;
-}
-
-/* Logo mic */
-/* LOGO – efect premium (Glow + Glass Ring) */
-.hub-logo {
-    width: 70px; /* ajustezi aici mărimea */
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
-
-    /* Glass ring */
-    padding: 4px;
-    background: rgba(255,255,255,0.35);
-    backdrop-filter: blur(6px);
-
-    /* Glow subtil */
-    transition: 0.25s ease;
-    box-shadow: 0 0 8px rgba(0,0,0,0.15);
-}
-
-.hub-logo:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 14px rgba(0,0,0,0.25);
-}
-
-/* Dark Mode – versiune mai subtilă */
 body.dark-mode .hub-logo {
     background: rgba(30,41,59,0.45);
     box-shadow: 0 0 6px rgba(255,255,255,0.08);
@@ -609,82 +367,33 @@ body.dark-mode .hub-logo:hover {
     box-shadow: 0 0 12px rgba(255,255,255,0.15);
 }
 
-
-/* FUNDAL ABSTRACT – LIGHT MODE */
-body {
-    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9), rgba(240,240,255,0.7)),
-                radial-gradient(circle at 80% 80%, rgba(220,240,255,0.6), rgba(255,255,255,0.8));
-    background-attachment: fixed;
-}
-
-/* FUNDAL ABSTRACT – DARK MODE */
-body.dark-mode {
-    background: radial-gradient(circle at 20% 20%, rgba(30,41,59,0.9), rgba(15,23,42,0.9)),
-                radial-gradient(circle at 80% 80%, rgba(51,65,85,0.6), rgba(15,23,42,1));
-    background-attachment: fixed;
-}
-
-
-/* GRID pentru carduri */
-.hub-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-.hub-card {
-    padding: 15px;
-    text-align: center;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-/* CARD MODERN – DESIGN DE BAZĂ */
-.hub-card {
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-    transition: all 0.25s ease;
-    cursor: pointer;
-    text-align: center;
-    font-weight: 600;
-    color: #1e293b;
-}
-
-/* DARK MODE – CARD MODERN */
+/* Carduri în dark mode */
 body.dark-mode .hub-card {
     background: rgba(30, 41, 59, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #e2e8f0;
 }
 
-/* PARTEA CU FOOTHER */
-
-/* FOOTER PREMIUM */
-
-/* Layout pentru footer jos de tot */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+body.dark-mode .hub-card:hover {
+    background: #334155;
+    transform: translateY(-3px);
 }
 
-/* FOOTER PREMIUM SUBȚIRE + ACCENT MOV */
+/* ============================================================
+   NOTE 10 — FOOTER PREMIUM
+   ============================================================ */
+
+/* Layout pentru footer jos de tot */
 .hub-footer {
     margin-top: auto;
-    padding: 10px 8px; /* subțire */
+    padding: 10px 8px;
     text-align: center;
     font-size: 13px;
     line-height: 1.3;
-
     backdrop-filter: blur(14px);
     background: rgba(255,255,255,0.05);
     border-top: 1px solid rgba(255,255,255,0.18);
     box-shadow: 0 -4px 12px rgba(0,0,0,0.25);
-
     color: rgba(255,255,255,0.85);
     position: relative;
     z-index: 10;
@@ -707,7 +416,6 @@ body.light-mode .hub-footer {
     background: rgba(245,240,255,0.95);
     border-top: 1px solid rgba(0,0,0,0.12);
     box-shadow: 0 -4px 12px rgba(0,0,0,0.10);
-
     color: rgba(0,0,0,0.75);
 }
 
@@ -723,4 +431,73 @@ body.light-mode .hub-footer::before {
     opacity: 0.9;
 }
 
+/* ============================================================
+   NOTE 11 — PRINTARE DEVIZ
+   ============================================================ */
+
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+
+    .page, .page * {
+        visibility: visible !important;
+    }
+
+    .page {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        background: white !important;
+        margin: 0 !important;
+        padding: 12mm !important;
+    }
+
+    .module-header,
+    .back-btn,
+    .btn-container,
+    .hub-header,
+    .hub-footer {
+        display: none !important;
+    }
+}
+
+/* ============================================================
+   NOTE 12 — BUTON ÎNAPOI LA HUB + ANTET PAGINI INTERNE
+   ============================================================ */
+
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: var(--blue);
+    color: white;
+    border-radius: var(--radius-m);
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.25s ease;
+}
+
+.back-btn:hover {
+    background: #1e4f80;
+}
+
+.module-header {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    border-radius: var(--radius-m);
+    backdrop-filter: blur(4px);
+}
+
+.module-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: white;
+    font-weight: 500;
+}
+
+.module-header .module-name {
+    font-weight: 600;
 }
