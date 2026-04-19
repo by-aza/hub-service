@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.0 — 2026-04-19
+### Release: Stoc Consumabile (public)
+- Pagina finalizată și stabilizată.
+- Publicată în folderul public.
+- Include toate optimizările din v0.0.9.
+
 # v0.0.9 — Flota Auto (API + Listă Mașini)
 **Data:** 14.04.2026  
 **Tip:** Feature Release + API Integration

@@ -1,4 +1,4 @@
-
+<!-- TEST ALEX 123 -->
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -47,33 +47,21 @@
       gap: 20px;
     }
 
-    .page-header {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
 
-    .page-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-    }
+   .layout {
+    max-width: 1200px !important;
+    margin: 0 auto !important; /* Centrat lateral */
+    padding-top: 0 !important; /* Scoatem spațiul de sus din interior */
+    margin-top: -10px !important; /* Valoare negativă pentru a "trage" tabelul în sus spre linie */
+    padding-bottom: 50px !important;
+}
 
-    .page-subtitle {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr);
-      gap: 20px;
-    }
 
     @media (max-width: 900px) {
       .layout {
         grid-template-columns: minmax(0, 1fr);
       }
+      
     }
 
     /* DASHBOARD CARDS */
@@ -219,39 +207,52 @@
       color: var(--text-muted);
     }
 
-    /* TABLE / LISTA PRODUSE */
+    /* ============================================================
+   NOTE — TABLE CARD CENTRAT
+   ============================================================ */
+.table-card {
+    width: 100%;
+    max-width: 1200px; /* ajustezi cât vrei */
+    margin: 0 auto;
+    background: rgba(15, 23, 42, 0.96);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-soft);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    .table-card {
-      background: rgba(15, 23, 42, 0.96);
-      border-radius: var(--radius);
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--shadow-soft);
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-height: 200px;
-    }
+    .table-title-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+}
 
     .table-header {
       font-size: 0.85rem;
       color: var(--text-muted);
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
     }
 
     .table-header span.count {
       font-size: 0.8rem;
     }
+	
+/* LISTA PRODUSE - latime */
 
     .product-list {
       display: flex;
       flex-direction: column;
       gap: 6px;
-      max-height: 70vh;
+      max-height: 74vh;
       overflow: auto;
       padding-right: 4px;
+	  margin: 0 auto;
+    width: 100%; /* Să ocupe tot spațiul disponibil în table-card */
     }
 
     .product-row {
@@ -285,7 +286,7 @@
     }
 
     .prod-name {
-      font-size: 0.95rem;
+      font-size: 1.3rem;
       font-weight: 600;
     }
 
@@ -345,7 +346,7 @@
     }
 
     .prod-stock strong {
-      font-size: 0.95rem;
+      font-size: 1.3rem;
     }
 
     .prod-right {
@@ -385,82 +386,332 @@
       color: var(--text-muted);
       padding: 10px 4px;
     }
+	
+
+/* LATIME LISTA PRODUSE (ajustabilă) */
+:root {
+    --lista-latime: 1600px; /* modifici cât vrei */
+}
+
+.product-list {
+    max-width: var(--lista-latime);
+    margin: 0 auto;
+}
+
+/* CONTAINER GENERAL */
+.stats-container {
+    display: none !important; /* Îl ascundem complet pentru a ridica tabelul */
+    justify-content: space-between;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 2 STÂNGA + 2 DREAPTA */
+.stats-left,
+.stats-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* CASETE */
+.stat-box {
+    background: rgba(255,255,255,0.05);
+    padding: 14px 18px;
+    border-radius: 8px;
+    width: 220px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(4px);
+}
+
+.stat-box h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.stat-box p {
+    margin: 4px 0 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* ASCUNDERE */
+.hidden {
+    display: none;
+}
+	
+.table-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.table-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.table-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-controls .filters {
+  display: flex;
+  gap: 6px;
+}
+
+.table-controls .search-box {
+  min-width: 200px;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
+.table-title-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.table-header .search-box {
+    flex: 1;
+    max-width: 300px;
+    width: 260px; /* sau cât vrei */
+}
+
+.table-header .filters {
+    display: flex;
+    gap: 6px;
+    
+}
+
+.count {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-left: 12px;
+}
+
+
+/* ============================================================
+   HEADER — IDENTIC CU INDEX.HTML
+   ============================================================ */
+
+
+
+.hub-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 4px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(6px);
+    transition: 0.25s ease;
+}
+
+.hub-logo:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 14px rgba(0,0,0,0.25);
+}
+
+/* Buton mov */
+.btn-back {
+    display: inline-block !important;
+    background: #8b5cf6 !important; /* Movul butonului */
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+}
+
+.btn-back:hover {
+    margin-left: auto !important; /* Aceasta îl trimite în colțul opus */
+    background: #8b5cf6 !important; /* Movul tău */
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+    transform: translateY(-1px);
+}
+/* ============================================================
+   HEADER — FINAL, IDENTIC CU INDEX.HTML
+   ============================================================ */
+.hub-header {
+    position: sticky !important;
+    top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    background: transparent !important;
+    padding-top: 1px !important;
+    padding-bottom: 1px !important; /* Redus de la 20px */
+    margin: 0 auto !important;
+    /* Schimbăm la 100% ca să se lipească de margini, 
+       dar controlăm interiorul cu padding dacă e nevoie */
+    max-width: 98% !important; 
+    width: 100% !important;
+}
+
+/* Forțăm Logo-ul și Titlul să stea lipite în stânga */
+.header-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    background: transparent !important;
+}
+
+.hub-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 4px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(6px);
+    transition: 0.25s ease;
+}
+
+
+.hub-logo:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 14px rgba(0,0,0,0.25);
+}
+
+
+
+.btn-back:hover {
+    background: #a78bfa;
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+    transform: translateY(-1px);
+}
+
+/* LINIA MOV CAP–COADĂ */
+.header-line {
+    position: relative !important;
+    left: 0 !important;
+    width: 100vw !important; /* vw înseamnă Viewport Width - tot ecranul */
+    margin-left: calc(-50vw + 50%) !important; /* Truc pentru a ieși din orice container și a ocupa tot ecranul */
+    height: 2px !important;
+    background: #b450ff !important;
+    box-shadow: 0 0 10px rgba(180, 80, 255, 0.7) !important;
+    z-index: 10;
+     margin-bottom: 8px !important; /* Distanța dintre linia mov și tabel */
+}
+
+
+/* Ridicăm cardul principal al tabelului */
+.inventory-container, .card, .module-card, [class*="container"] {
+    margin-top: 0 !important;
+    padding-top: 10px !important;
+}
+
+.prod-stock.ok strong {
+    color: var(--accent-ok);
+}
+
+.prod-stock.low strong {
+    color: var(--accent-low);
+}
+
+.prod-stock.out strong {
+    color: var(--accent-out);
+}
+
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="page-header">
-      <div class="page-title">Stoc consumabile</div>
-      <div class="page-subtitle">Vizualizare rapidă pentru colegi — date live din Google Sheets (tabul STOC).</div>
-    </header>
-
-    <div class="layout">
-      <!-- DASHBOARD -->
-      <section class="dashboard">
-        <div class="dashboard-row">
-          <div class="dash-card ok" id="card-ok">
-            <div class="dash-label">Produse OK</div>
-            <div class="dash-value" id="count-ok">0</div>
-            <div class="dash-pill">stoc &gt; 0</div>
-          </div>
-          <div class="dash-card out" id="card-out">
-            <div class="dash-label">Produse OUT</div>
-            <div class="dash-value" id="count-out">0</div>
-            <div class="dash-pill">stoc = 0</div>
-          </div>
-        </div>
-
-        <div class="dashboard-row">
-          <div class="dash-card low" id="card-low">
-            <div class="dash-label">Produse LOW</div>
-            <div class="dash-value" id="count-low">0</div>
-            <div class="dash-pill">logică LOW o definim ulterior</div>
-          </div>
-          <div class="dash-card" id="card-total">
-            <div class="dash-label">Total produse</div>
-            <div class="dash-value" id="count-total">0</div>
-            <div class="dash-pill">înregistrate în tabul STOC</div>
-          </div>
-        </div>
-
-        <div class="controls">
-          <div class="filters">
-            <button class="filter-btn active" data-status="all">
-              <span class="dot"></span> Toate
-            </button>
-            <button class="filter-btn" data-status="ok">
-              <span class="dot"></span> OK
-            </button>
-            <button class="filter-btn" data-status="low">
-              <span class="dot"></span> LOW
-            </button>
-            <button class="filter-btn" data-status="out">
-              <span class="dot"></span> OUT
-            </button>
-          </div>
-          <div class="search-box">
-            <input
-              type="text"
-              class="search-input"
-              id="search-input"
-              placeholder="Caută după denumire sau cod..."
-            />
-          </div>
-        </div>
-      </section>
-
-      <!-- LISTA PRODUSE -->
-      <section class="table-card">
-        <div class="table-header">
-          <span>Produse pe stoc</span>
-          <span class="count" id="visible-count">0 produse afișate</span>
-        </div>
-        <div class="product-list" id="product-list">
-          <div class="empty-state">Se încarcă datele din Google Sheets...</div>
-        </div>
-      </section>
+ 
+<!-- HEADER REPARAT -->
+<header class="hub-header">
+    <div class="header-left">
+        <img src="../../icons/logo.png" alt="Logo" class="hub-logo">
+        <h1>Stoc consumabile</h1>
     </div>
+    <button class="btn-back" onclick="window.location.href='../../index.html'">
+        ← Înapoi la HUB
+    </button>
+</header>
+<div class="header-line"></div>
+
+      <!-- DASHBOARD -->
+      <div class="stats-container">
+
+    <div class="stats-left">
+        <div class="stat-box hidden">
+            <h3>PRODUSE OK</h3>
+            <p id="stat-ok">0</p>
+        </div>
+
+        <div class="stat-box hidden">
+            <h3>PRODUSE LOW</h3>
+            <p id="stat-low">0</p>
+        </div>
+    </div>
+
+    <div class="stats-right">
+        <div class="stat-box hidden">
+            <h3>PRODUSE OUT</h3>
+            <p id="stat-out">0</p>
+        </div>
+
+        <div class="stat-box hidden">
+            <h3>TOTAL PRODUSE</h3>
+            <p id="stat-total">0</p>
+        </div>
+    </div>
+
+</div>
+
+     <!-- LISTA PRODUSE -->
+<section class="table-card">
+
+  <div class="table-header">
+
+    <span class="table-title-text">Produse pe stoc</span>
+
+    <div class="search-box">
+      <input
+        type="text"
+        class="search-input"
+        id="search-input"
+        placeholder="Caută după denumire sau cod..."
+      />
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-status="all"><span class="dot"></span> Toate</button>
+      <button class="filter-btn" data-status="ok"><span class="dot"></span> OK</button>
+      <button class="filter-btn" data-status="low"><span class="dot"></span> LOW</button>
+      <button class="filter-btn" data-status="out"><span class="dot"></span> OUT</button>
+    </div>
+
+    <span class="count" id="visible-count">0 produse afișate</span>
+
   </div>
+
+
+
+  <div class="product-list" id="product-list">
+    <div class="empty-state">Se încarcă datele din Google Sheets...</div>
+  </div>
+
+</section>
+
+</div>
+
+
+  
 
   <script>
   /* ============================================================
@@ -470,19 +721,12 @@
   const CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7mX8RLv-YJ8OU0zCF3Kt6khLDosTW5wAZJ6Ba83Xd8U24gNqXIupTdwJl_j3tftiOdfAqo2E1cPeL/pub?gid=906891078&single=true&output=csv";
 
-  /* Variabile interne */
   let allProducts = [];
   let currentFilter = "all";
   let currentSearch = "";
 
   /* ============================================================
-     NOTE 2 — PARSARE CSV
-     Aici se mapează coloanele din tabul STOC:
-     A = Cod Produs
-     B = Denumire
-     C = Total IN
-     D = Total OUT
-     E = Stoc Actual
+     NOTE 2 — PARSARE CSV (ACUM INCLUDE ȘI PRAG MINIM)
      ============================================================ */
   function parseCSV(text) {
     const lines = text.trim().split(/\r?\n/);
@@ -495,40 +739,42 @@
 
     const header = rows.shift() || [];
 
-    const idxCode = header.findIndex((h) =>
-      h.toLowerCase().includes("cod")
-    );
-    const idxName = header.findIndex((h) =>
-      h.toLowerCase().includes("denum")
-    );
-    const idxStock = header.findIndex((h) =>
-      h.toLowerCase().includes("stoc")
-    );
+    const idxCode = header.findIndex((h) => h.toLowerCase().includes("cod"));
+    const idxName = header.findIndex((h) => h.toLowerCase().includes("denum"));
+    const idxStock = header.findIndex((h) => h.toLowerCase().includes("stoc"));
+    const idxPrag = header.findIndex((h) => h.toLowerCase().includes("prag"));
 
     return rows
       .map((cols) => {
         const code = cols[idxCode] || "";
         const name = cols[idxName] || "";
         const stock = Number((cols[idxStock] || "0").replace(",", ".")) || 0;
-        return { code, name, stock };
+        const prag = Number((cols[idxPrag] || "").replace(",", ".")) || null;
+
+        return { code, name, stock, prag };
       })
       .filter((p) => p.name || p.code);
   }
 
   /* ============================================================
-     NOTE 3 — LOGICĂ STATUS
-     OUT = stoc 0
-     OK  = stoc > 0
-     LOW = îl activăm când introduci un prag minim în sheet
+     NOTE 3 — LOGICĂ STATUS (OK / LOW / OUT)
      ============================================================ */
   function computeStatus(product) {
-    if (product.stock <= 0) return "out";
+    const stock = product.stock;
+    const prag = product.prag;
+
+    if (stock <= 0) return "out";
+
+    // dacă pragul nu este setat → produsul este OK
+    if (prag === null || isNaN(prag)) return "ok";
+
+    if (stock > 0 && stock <= prag) return "low";
+
     return "ok";
   }
 
   /* ============================================================
      NOTE 4 — RENDER LISTĂ PRODUSE
-     Aici controlezi cum arată fiecare produs în listă.
      ============================================================ */
   function render() {
     const listEl = document.getElementById("product-list");
@@ -583,12 +829,19 @@
           </div>
 
           <div class="prod-right">
-            <span class="pill-small">
-              <span class="dot"></span>
-              vizualizare rapidă
-            </span>
+            ${
+              p.prag !== null
+                ? `<span class="pill-small">Prag: ${p.prag}</span>`
+                : `<span class="pill-small" style="opacity:0.4;">Fără prag</span>`
+            }
           </div>
         `;
+
+      // colorare text "Stoc: X buc"
+const stockEl = row.querySelector(".prod-stock");
+if (status === "ok") stockEl.classList.add("ok");
+if (status === "low") stockEl.classList.add("low");
+if (status === "out") stockEl.classList.add("out");
 
         listEl.appendChild(row);
       });
@@ -598,23 +851,25 @@
   }
 
   /* ============================================================
-     NOTE 5 — DASHBOARD (cardurile OK / OUT / TOTAL)
+     NOTE 5 — DASHBOARD (OK / LOW / OUT / TOTAL)
      ============================================================ */
   function updateDashboard() {
     const total = allProducts.length;
     let ok = 0;
+    let low = 0;
     let out = 0;
 
     allProducts.forEach((p) => {
       const status = computeStatus(p);
       if (status === "ok") ok++;
+      if (status === "low") low++;
       if (status === "out") out++;
     });
 
     document.getElementById("count-total").textContent = total;
     document.getElementById("count-ok").textContent = ok;
+    document.getElementById("count-low").textContent = low;
     document.getElementById("count-out").textContent = out;
-    document.getElementById("count-low").textContent = 0; // LOW vine mai târziu
   }
 
   /* ============================================================
@@ -645,18 +900,17 @@
   }
 
   /* ============================================================
-     NOTE 7 — ÎNCĂRCARE DATE DIN GOOGLE SHEETS
+     NOTE 7 — ÎNCĂRCARE DATE
      ============================================================ */
   async function loadData() {
     try {
       const res = await fetch(CSV_URL);
-
       if (!res.ok) throw new Error("HTTP " + res.status);
 
       const text = await res.text();
       allProducts = parseCSV(text);
 
-      updateDashboard();
+    //  updateDashboard();
       render();
     } catch (err) {
       console.error("Eroare CSV:", err);
@@ -665,9 +919,6 @@
     }
   }
 
-  /* ============================================================
-     NOTE 8 — START
-     ============================================================ */
   initEvents();
   loadData();
 </script>
