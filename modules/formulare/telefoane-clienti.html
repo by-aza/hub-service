@@ -570,10 +570,24 @@ document.getElementById("searchInput").oninput = function() {
       console.error("Eroare la trimitere:", e);
     }
   }
+
+  
+
+  // Punem acest cod sub celelalte funcții de popup
+const fields = ["popupClient", "popupObs", "popupTel"];
+
+fields.forEach(id => {
+  const input = document.getElementById(id);
+  if (input) {
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault(); // Oprește orice altă acțiune a tastei Enter
+        addData(); // Aceasta este funcția ta care trimite datele în Google Sheet
+      }
+    });
+  }
+});
 </script>
-
-
-
 
 
 

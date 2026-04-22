@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.0 — 2026-04-22
+### Release: Telefoane clienti (public)
+- Pagina finalizată și stabilizată.
+- Publicată în folderul public.
+- Include toate optimizările din v0.1.0.
+
 ## v0.1.0 — 2026-04-19
 ### Release: Stoc Consumabile (public)
 - Pagina finalizată și stabilizată.
