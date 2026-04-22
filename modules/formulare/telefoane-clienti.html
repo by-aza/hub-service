@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telefoane Clienți</title>
+
+    <!-- NOTE: Stil identic cu Stocuri consumabile -->
+    <style>
+
+    :root {
+    --col-client: 1.4fr;   /* nume / firmă / model */
+    --col-obs: 3fr;        /* probleme, detalii */
+    --col-tel: 0.7fr;      /* doar nr. de telefon */
+}
+    
+        body {
+            margin: 0;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #e6edf3;
+        }
+
+        /* SETARI CASETE - VARIANTA COMPACTA */
+        .container {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+.page-wrapper {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-top: 0px; /* spațiu sub header */
+}
+#listContainer {
+    max-height: calc(100vh - 240px); 
+    overflow-y: auto;
+    margin-top: 10px;
+    padding-right: 5px; /* ca să nu taie scrollbarul textul */
+}
+
+
+        /* HEADER */
+        .hub-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    padding: 15px 20px 10px 20px;
+    background: transparent; /* lasă gradientul body să se vadă */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* LOGO + TITLU */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 4px;
+    
+    backdrop-filter: blur(6px);
+    transition: 0.25s ease;
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
+}
+.header-logo:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 14px rgba(0,0,0,0.25);
+}
+
+.header-title {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+/* BUTON HUB */
+.hub-btn {
+    display: inline-block !important;
+    background: #8b5cf6 !important; /* Movul butonului */
+    color: white !important;
+    padding: 8px 14px !important;/* mai îngust */
+    border-radius: 8px !important;
+    border: 1px solid #8b5cf6;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.2s;
+    margin-right: 40px; /* îl aduce spre stânga */
+}
+
+.hub-btn:hover {
+    margin-left: auto !important; /* Aceasta îl trimite în colțul opus */
+    background: #8b5cf6 !important; /* Movul tău */
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+    transform: translateY(-1px);
+}
+
+/* LINIA MOV */
+.header-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #b450ff;
+    box-shadow: 0 0 12px rgba(180, 80, 255, 0.7);
+}
+.page-content {
+    padding-top: 90px; /* ajustezi după înălțimea headerului tău */
+    height: auto;      /* IMPORTANT */
+    overflow: visible; /* IMPORTANT */
+}
+
+        /* SEARCH BAR */
+        .search-container {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    background: #0f172a;
+    color: #e6edf3;
+    font-size: 15px;
+        }
+
+        .search-wrapper {
+     position: sticky; 
+     top: 120px; /* exact sub headerul tău */ 
+     z-index: 40;
+     backdrop-filter: blur(6px);
+     padding: 12px 0;
+     margin-bottom: 10px;
+     margin-left: auto;
+     margin-right: auto;     
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* spațiu între search și + */
+    width: 100%;
+    max-width: 600px; /* controlează lățimea totală */
+}
+
+        .add-btn {
+            background: #22c55e;
+    color: white;
+    padding: 15px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 35px; /* + mai mare */
+    font-weight: 700;
+    border: 1px solid #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0.5;
+    transition: 0.2s;
+        }
+
+        .add-btn:hover {
+    background: #16a34a;
+}
+
+        /* LIST ROWS */
+        .row {
+            background-color: #161b22;
+            margin: 10px 15px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        .row-item {
+            margin-bottom: 6px;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #8b949e;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+/* CAP TABEL FIX */
+.table-head {
+    position: sticky;
+    top: 187px;
+    z-index: 50;
+    display: grid;
+    /* Folosim fix aceleași coloane ca la rânduri */
+    grid-template-columns: var(--col-client) var(--col-obs) var(--col-tel);
+    
+    /* MODIFICARE LĂȚIME: */
+    width: auto; 
+    margin: 0 15px 20px 15px; /* Marginile 15px stânga/dreapta trebuie să fie IDENTICE cu cele de la .row-item */
+    
+    /*background: rgba(22, 2, 49, 0.89);*/
+    backdrop-filter: blur(6px);
+    padding: 12px 15px; /* Padding-ul trebuie să fie identic cu .row-item */
+    border-radius: 10px;
+}
+.cell.tel {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+/* TEXT COLOANE */
+.th-col {
+    font-size: 24px;
+    font-weight: 600;
+    color: #e879f9; /* movul tău din screenshot */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+/* RÂND (CASETĂ) */
+.row-item {
+    display: grid;
+    grid-template-columns: var(--col-client) var(--col-obs) var(--col-tel);
+    background: #0d1117;
+    border: 1px solid #30363d;
+    align-items: center; /* Centrează textul pe verticală */
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin: 10px 15px;
+    gap: 10px;
+}
+.row-item:hover {
+    border-color: #e879f9; /* Se aprinde marginea când treci cu mouse-ul */
+}
+
+    /* TEXT DIN CASETA) */
+.cell {
+    font-size: 15px;
+    color: #e6edf3;
+    overflow-wrap: break-word; /* textul nu iese din coloană */
+}
+     /* LINII VERTICALE DISCRETE) */   
+.cell:not(:last-child) {
+    border-right: 1px solid #2a2f3a;
+    padding-right: 10px;
+}
+
+/* POPUP OVERLAY */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: none; /* IMPORTANT: ASCUNS IMPLICIT */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* POPUP BOX */
+.popup-box {
+    background: #fff;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    animation: popupZoom 0.25s ease;
+}
+@keyframes popupZoom {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popup-box input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    box-sizing: border-box; /* IMPORTANT */
+    font-size: 15px; /* înainte era 14px */
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* OVERLAY întunecat */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.55); /* mai întunecat */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* CUTIA POPUP */
+.popup-box {
+    background: #1f1f1f; /* fundal închis, ca HUB-ul */
+    padding: 20px;
+    width: 320px;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    color: white;
+    font-family: inherit;
+}
+
+/* TITLU */
+.popup-box h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 22px;
+    color: #b57aff; /* movul tău */
+}
+
+/* LABEL */
+.popup-box label {
+    font-size: 15px;
+    margin-bottom: 5px;
+    display: block;
+    color: #cccccc;
+}
+
+/* INPUT-URI */
+.popup-box input {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: white;
+    font-size: 14px;
+}
+
+/* BUTOANE */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+/* BUTON ANULEAZĂ */
+#popupCancel {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+#popupCancel:hover {
+    background: #555;
+}
+
+/* BUTON ADAUGĂ */
+#popupSubmit {
+    background: #4CAF50; /* verdele tău */
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+#popupSubmit:hover {
+    background: #45a049;
+}
+
+/* Bordură mov la focus */
+.popup-box input:focus {
+    border: 1px solid #b57aff; /* movul tău */
+    outline: none;
+    box-shadow: 0 0 6px rgba(181, 122, 255, 0.6);
+    transition: 0.2s;
+
+    
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="hub-header">
+    <div class="header-left">
+        <img src="../../icons/logo.png" alt="Logo" class="header-logo">
+        <span class="header-title">Telefoane Clienți</span>
+    </div>
+    
+    <a href="../../index.html" class="hub-btn">← Înapoi la HUB</a>
+
+    <div class="header-line">
+</header>
+
+    <!-- SEARCH + ADD -->
+     <div class="page-wrapper">
+    <div class="page-content">
+
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input"
+               placeholder="Caută client, observații sau telefon...">
+
+        <a href="#" id="btnAdd" class="add-btn">+</a>
+    </div>
+
+    <!-- POPUP ADD CLIENT -->
+<div id="popupAdd" class="popup-overlay">
+    <div class="popup-box">
+        <h3>Adaugă client</h3>
+
+        <label>Client</label>
+        <input type="text" id="popupClient">
+
+        <label>Observații</label>
+        <input type="text" id="popupObs">
+
+        <label>Telefon</label>
+        <input type="text" id="popupTel">
+
+        <div class="popup-buttons">
+            <button id="popupCancel">Anulează</button>
+            <button id="popupSubmit">Adaugă</button>
+        </div>
+    </div>
+</div>
+
+        <!-- CAP TABEL -->
+    <div class="table-head">
+    <div class="th-col">CLIENT</div>
+    <div class="th-col">OBSERVAȚII</div>
+    <div class="th-col">TELEFON</div>
+    </div>
+    <!-- LISTA -->
+    <div id="listContainer"></div>
+
+    </div>
+    </div>
+
+    
+    <script>
+        
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVj7js45c2TP-J2huSxT6ZInfimZ9h77PCHwqJ-PO5QcfclNbIJZ7nqpnf9NTlmRK-dw/exec"; // URL-ul tău e bun
+
+  let dateComplete = []; // Aici vom păstra copia datelor pentru căutare
+
+  // 1. APELĂM FUNCȚIA LA ÎNCĂRCAREA PAGINII
+  window.onload = loadData;
+
+  async function loadData() {
+    try {
+      const response = await fetch(SCRIPT_URL);
+      dateComplete = await response.json(); // Salvăm datele în variabila globală
+      renderList(dateComplete); // Afișăm toată lista la început
+    } catch (e) {
+      console.error("Eroare la încărcare:", e);
+    }
+}
+// Punem asta direct în script sau în window.onload
+document.getElementById("searchInput").oninput = function() {
+    const q = this.value.toLowerCase();
+    
+    // Filtrăm din variabila globală dateComplete
+    const filtered = dateComplete.filter(item => 
+      (item.client || "").toString().toLowerCase().includes(q) || 
+      (item.obs || "").toString().toLowerCase().includes(q) || 
+      (item.tel || "").toString().toLowerCase().includes(q)
+    );
+    
+    renderList(filtered);
+};
+
+
+
+
+  // 2. FUNCȚIA CARE "DESENEAZĂ" DATELE (Lipsea din codul tău)
+  function renderList(data) {
+    const container = document.getElementById("listContainer");
+    container.innerHTML = ""; 
+
+    data.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "row-item"; // Clasa ta din CSS pentru casetă
+        
+        row.innerHTML = `
+            <div class="cell">${item.client || ""}</div>
+            <div class="cell">${item.obs || ""}</div>
+            <div class="cell tel">${item.tel || ""}</div>
+        `;
+        container.appendChild(row);
+    });
+}
+
+  // 3. LOGICA PENTRU BUTOANE (Popup și Adăugare)
+  document.getElementById("btnAdd").onclick = () => {
+    document.getElementById("popupAdd").style.display = "flex";
+  };
+
+  document.getElementById("popupCancel").onclick = () => {
+    document.getElementById("popupAdd").style.display = "none";
+  };
+
+  document.getElementById("popupSubmit").onclick = addData;
+
+  async function addData() {
+    const payload = {
+      client: document.getElementById("popupClient").value,
+      obs: document.getElementById("popupObs").value,
+      tel: document.getElementById("popupTel").value
+    };
+
+    if (!payload.client) { alert("Introdu numele clientului!"); return; }
+
+    try {
+      // Schimbăm butonul să arate că lucrează
+      document.getElementById("popupSubmit").innerText = "Se trimite...";
+      
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        cache: "no-cache",
+        body: JSON.stringify(payload)
+      });
+
+      // Resetăm totul după succes
+      document.getElementById("popupAdd").style.display = "none";
+      document.getElementById("popupSubmit").innerText = "Adaugă";
+      document.getElementById("popupClient").value = "";
+      document.getElementById("popupObs").value = "";
+      document.getElementById("popupTel").value = "";
+
+      // Reîncărcăm datele după 1.5 secunde
+      setTimeout(loadData, 1500);
+    } catch (e) {
+      console.error("Eroare la trimitere:", e);
+    }
+  }
+</script>
+
+
+
+
+
+
+</body>
+</html>

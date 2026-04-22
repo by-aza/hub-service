@@ -7,143 +7,115 @@
 
   <style>
     /* ===========================
-       VARIABILE DARK / LIGHT
-    ============================ */
-    :root {
-        --bg: #f5f5f5;
-        --bg-header: #ffffff;
-        --text-header: #1e293b;
-        --btn-bg: #e2e8f0;
-        --btn-text: #1e293b;
-        --card-bg: #ffffff;
-        --card-border: #ddd;
-    }
-
-    .dark {
-        --bg: #0f172a;
-        --bg-header: #1e293b;
-        --text-header: #f8fafc;
-        --btn-bg: #334155;
-        --btn-text: #f8fafc;
-        --card-bg: #1e293b;
-        --card-border: #475569;
-    }
-
-    body {
-        background: var(--bg);
-        color: var(--text-header);
-        margin: 0;
-        font-family: Segoe UI, sans-serif;
-    }
-
-    /* ===========================
-       HEADER
-    ============================ */
-    .hub-header {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        background: var(--bg-header);
-        color: var(--text-header);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 18px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-
-    .hub-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .hub-logo {
-        height: 32px;
-    }
-
-    .hub-title {
-        font-size: 20px;
-        font-weight: 600;
-    }
-
-    .hub-right {
-        display: flex;
-        gap: 10px;
-    }
-
-    .hub-btn {
-        background: var(--btn-bg);
-        color: var(--btn-text);
-        border: none;
-        padding: 8px 14px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    /* ===========================
-       CARDURI MASINI
-    ============================ */
-    .lista-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 15px;
-        padding: 15px;
-    }
-
-    .card {
-        background: var(--card-bg);
-        border: 2px solid var(--card-border);
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .card h2 {
-        margin: 0 0 5px;
-        font-size: 20px;
-    }
-
-    .card p {
-        margin: 4px 0;
-        font-size: 14px;
-    }
-
-    .verde { color: #2ecc71; }
-    .galben { color: #f1c40f; }
-    .rosu { color: #e74c3c; }
-
-    .butoane {
-        margin-top: 12px;
-        display: flex;
-        gap: 10px;
-    }
-
-    .butoane button,
-    .butoane a {
-        flex: 1;
-        padding: 10px;
-        font-size: 15px;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        color: white;
-    }
-
-    .butoane button {
-        background: #2B6CB0;
-    }
-
-    .butoane a {
-        background: #555;
-    }
-	
-	/* ===========================
-   LISTA CARDURI
+   FUNDAL + BODY
 =========================== */
+
+body {
+    background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+    margin: 0;
+    font-family: Segoe UI, sans-serif;
+    color: #ffffff;
+    padding-top: 130px; /* spațiu pentru header fix */
+}
+
+/* ===========================
+   HEADER FIX
+=========================== */
+
+.hub-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    padding-left: 15px; /* înainte era 20px */
+}
+
+.hub-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hub-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.hub-title {
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.hub-right {
+    display: flex;
+    gap: 10px;
+    margin-right: 20px;
+}
+
+/* ===========================
+   BUTOANE HEADER
+=========================== */
+
+.btn-back {
+    background: #8b5cf6;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-back:hover {
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+    transform: translateY(-1px);
+}
+
+#addCarBtn {
+    background: transparent;
+    color: #22c55e;
+    font-size: 22px;
+    font-weight: bold;
+    border: 2px solid #22c55e;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+#addCarBtn:hover {
+    background: rgba(34, 197, 94, 0.15);
+}
+
+/* ===========================
+   LINIA MOV
+=========================== */
+
+.header-line {
+    width: 100%;
+    height: 3px;
+    background: #b450ff;
+    box-shadow: 0 0 10px rgba(180, 80, 255, 0.7);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 9998; /* sub header, peste restul */
+}
+
+/* ===========================
+   GRID CARDURI
+=========================== */
+
 .lista-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -152,66 +124,84 @@
 }
 
 /* ===========================
-   CARD MASINA
+   CARDURI
 =========================== */
+
 .card {
-    background: var(--card-bg);
-    border: 2px solid var(--card-border);
-    border-radius: 12px;
+    background: #1e293b;
+    color: #ffffff;
+    border-radius: 14px;
     padding: 16px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-    transition: 0.2s ease;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+    transform: scale(1.01);
+    box-shadow: 0 0 14px rgba(0,0,0,0.55);
+    z-index: 5; /* sub linia mov */
 }
 
 /* ===========================
    TITLU + VIN
 =========================== */
+
 .card .nr {
-    font-size: 22px;
+    font-size: 1.6rem;
     font-weight: 700;
     margin-bottom: 6px;
 }
 
+.marca {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #cbd5e1;
+}
+
 .card .vin {
-    font-size: 13px;
-    color: #6b7280;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #cbd5e1;
     margin-bottom: 12px;
 }
 
 /* ===========================
    LINIUTE ITP / RCA / ROV
 =========================== */
+
 .linie {
-    font-size: 15px;
-    margin: 4px 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 6px 0;
     display: flex;
     justify-content: space-between;
 }
 
-.linie span {
-    font-weight: 600;
-    color: var(--text-header);
+.linie b {
+    font-size: 1.4rem;
+    font-weight: 700;
 }
 
 /* ===========================
    OBSERVATII
 =========================== */
-.obs {
-    margin-top: 12px;
+
+.card .obs {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    background: rgba(255,255,255,0.05);
     padding: 8px;
-    background: rgba(0,0,0,0.05);
     border-radius: 6px;
-    font-size: 14px;
 }
 
 /* ===========================
-   BUTOANE
+   BUTOANE CARD
 =========================== */
+
 .butoane {
     margin-top: 14px;
     display: flex;
@@ -224,12 +214,14 @@
     padding: 10px;
     border-radius: 6px;
     border: none;
-    cursor: pointer;
+    cursor: not-allowed;
     font-weight: 600;
     font-size: 14px;
     text-align: center;
     text-decoration: none;
-    color: white;
+    background: #475569;
+    color: #cbd5e1;
+    opacity: 0.6;
 }
 
 .butoane button {
@@ -251,135 +243,35 @@
 /* ===========================
    CULORI CARDURI
 =========================== */
-.verde {
-    border-left: 8px solid #22c55e;
-}
 
-.galben {
-    border-left: 8px solid #eab308;
-}
-
-.rosu {
-    border-left: 8px solid #ef4444;
-}
-
-/* ===========================
-   CARDURI DARK SUPER LIZIBILE
-=========================== */
-
-.card {
-    background: #1e293b; /* albastru închis solid – contrast excelent */
-    color: #ffffff;      /* text alb puternic */
-    border-radius: 14px;
-    padding: 16px;
-    border: 1px solid #334155; /* contur discret */
-    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-}
-
-/* Text mai clar */
-.card .linie span,
-.card .linie b,
-.card .vin,
-.card .nr,
-.card .obs {
-    color: #ffffff;
-    font-weight: 600;
-}
-
-/* ===========================
-   BORDERE COLORATE (vizibile)
-=========================== */
-
-.verde {
-    border-left: 8px solid #22ff88;
-}
-
-.galben {
-    border-left: 8px solid #ffe666;
-}
-
-.rosu {
-    border-left: 8px solid #ff4444;
-}
-
-/* Hover simplu, fără glow */
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-}
-
-/* TEXT MAI MARE ȘI MAI LIZIBIL */
-.card .nr {
-    font-size: 1.6rem;
-    font-weight: 700;
-}
-
-.card .vin {
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.card .linie {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin: 6px 0;
-}
-
-.card .linie b {
-    font-size: 1.4rem;
-    font-weight: 700;
-}
-
-.card .obs {
-    font-size: 1.2rem;
-    margin-top: 10px;
-}
-
-.card button {
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-/* CARD DARK SOLID – SUPER LIZIBIL */
-.card {
-    background: #1e293b; /* fundal închis */
-    color: #ffffff;      /* text alb */
-    border-radius: 14px;
-    padding: 16px;
-    border: 1px solid #334155;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-}
-
-/* BUTOANE DEZACTIVATE */
-.card button {
-    background: #475569; /* gri închis */
-    color: #cbd5e1;      /* gri deschis */
-    border: none;
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
+.verde { border-left: 8px solid #22ff88; }
+.galben { border-left: 8px solid #ffe666; }
+.rosu { border-left: 8px solid #ff4444; }
 
   </style>
 </head>
 
 <body>
 
-  <!-- ===========================
-       HEADER NOU
-  ============================ -->
-  <header class="hub-header">
-      <div class="hub-left">
-          <img src="../../icons/96x96.png" class="hub-logo" alt="Logo">
-          <span class="hub-title">Flota Auto</span>
-      </div>
+  <!-- HEADER FIX -->
+    <header class="hub-header">
 
-      <div class="hub-right">
-          <button class="hub-btn" onclick="location.href='../../index.html'">⟵ Înapoi la HUB</button>
-          <button class="hub-btn" id="themeToggle">🌙</button>
-      </div>
-  </header>
+        <div class="hub-left">
+            <img src="../../icons/96x96.png" class="hub-logo" alt="Logo">
+            <span class="hub-title">Flota Auto</span>
+        </div>
 
+        <div class="hub-right">
+            <button class="btn-back" onclick="window.location.href='../../index.html'">
+                ← Înapoi la HUB
+            </button>
+
+            <button class="hub-btn" id="addCarBtn">➕</button>
+        </div>
+
+        <div class="header-line"></div>
+    </header>
+  
   <!-- ===========================
        LISTA MASINI
   ============================ -->
@@ -393,6 +285,7 @@ async function incarcaMasini() {
   const raspuns = await fetch(
     "https://script.google.com/macros/s/AKfycby44VeJwAhO5SDklVUyGB5otT0QBpue_vtfWyFScs5uelDlvIwkbJm6t6nZB1CjDOlW5A/exec"
   );
+
   const masini = await raspuns.json();
   const container = document.getElementById("lista");
 
@@ -401,7 +294,7 @@ async function incarcaMasini() {
     card.className = "card";
 
     // ===========================
-    // CALCUL ZILE RAMASE DIRECT ÎN HTML
+    // CALCUL ZILE RAMASE
     // ===========================
     function zileRamase(data) {
       if (!data || data.trim() === "") return "-";
@@ -411,13 +304,12 @@ async function incarcaMasini() {
 
       if (isNaN(expira.getTime())) return "-";
 
-      const diff = Math.floor((expira - azi) / (1000 * 60 * 60 * 24));
-      return diff;
+      return Math.floor((expira - azi) / (1000 * 60 * 60 * 24));
     }
 
-    const itp = zileRamase(m.itp);            // F
-    const rca = zileRamase(m.rca);            // D
-    const rov = zileRamase(m.rovinieta);      // H
+    const itp = zileRamase(m.itp);
+    const rca = zileRamase(m.rca);
+    const rov = zileRamase(m.rovinieta);
 
     // ===========================
     // CULOARE CARD
@@ -436,10 +328,13 @@ async function incarcaMasini() {
     const linkActe = m.link && m.link.startsWith("http") ? m.link : "#";
 
     // ===========================
-    // HTML CARD
+    // HTML CARD (CU MARCA)
     // ===========================
     card.innerHTML = `
       <div class="nr">${m.nr}</div>
+
+      <div class="marca">${m.marca || ""}</div>
+
       <div class="vin">VIN: ${m.vin}</div>
 
       <div class="linie"><span>ITP:</span> <b>${itp}</b> zile</div>
@@ -449,8 +344,8 @@ async function incarcaMasini() {
       <div class="obs">Observații: ${m.obs || "-"}</div>
 
       <div class="butoane">
-        <button onclick="modifica('${m.rowIndex}')">✏️ Modifică</button>
-        <button onclick="veziActe('${linkActe}')">📁 Acte</button>
+        <button onclick="modifica('${m.rowIndex}')">Modifică</button>
+        <button onclick="veziActe('${linkActe}')">Acte</button>
       </div>
     `;
 
@@ -459,7 +354,7 @@ async function incarcaMasini() {
 }
 
 function modifica(rowIndex) {
-  return; // nu face nimic
+  return; // dezactivat
 }
 
 function veziActe(link) {
@@ -467,6 +362,7 @@ function veziActe(link) {
 }
 
 window.onload = incarcaMasini;
+
 </script>
 
 
@@ -474,8 +370,8 @@ window.onload = incarcaMasini;
        SCRIPT DARK / LIGHT
   ============================ -->
   <script>
-    document.getElementById("themeToggle").onclick = () => {
-        document.body.classList.toggle("dark");
+    document.getElementById("addCarBtn").onclick = () => {
+        window.location.href = "adauga.html";
     };
   </script>
 
