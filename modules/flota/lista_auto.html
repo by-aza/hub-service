@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>Lista Mașini - Flota Auto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="../../manifest.json">
+  <meta name="theme-color" content="#0078d7">
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("../../sw.js").catch((error) => {
+          console.error("Service Worker registration failed:", error);
+        });
+      });
+    }
+  </script>
   <link rel="stylesheet" href="../../style.css">
 
   <style>
