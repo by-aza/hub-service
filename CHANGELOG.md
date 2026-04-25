@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.1 — 2026-04-24
+### Update: Optimizare mobil (public)
+- HUB, COnsumabile, Telefoane clienti optimizate mobil
+- Corectat erori
+
 ## v0.2.0 — 2026-04-22
 ### Release: Telefoane clienti (public)
 - Pagina finalizată și stabilizată.

@@ -503,6 +503,45 @@
     margin-left: 12px;
 }
 
+@media (max-width: 900px) {
+  .table-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .table-header .search-box {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .table-header .filters {
+    order: 3;
+    width: 100%;
+    margin: 0;
+    gap: 8px;
+  }
+
+  .count {
+    order: 4;
+    width: 100%;
+    margin-left: 0;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 600px) {
+  .table-header .filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-btn {
+    justify-content: center;
+    min-height: 38px;
+  }
+}
+
 
 /* ============================================================
    HEADER — IDENTIC CU INDEX.HTML
@@ -569,6 +608,41 @@
     align-items: center !important;
     gap: 15px !important;
     background: transparent !important;
+}
+
+.header-left h1 {
+    font-size: 2.1rem;
+    line-height: 1.05;
+}
+
+@media (max-width: 700px) {
+  .hub-header {
+    max-width: 100% !important;
+    padding: 2px 6px !important;
+    gap: 8px !important;
+  }
+
+  .header-left {
+    gap: 8px !important;
+    min-width: 0;
+  }
+
+  .header-left h1 {
+    font-size: 1.05rem !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+  }
+
+  .hub-logo {
+    width: 50px !important;
+    height: 50px !important;
+    padding: 2px !important;
+  }
+
+  .btn-back {
+    padding: 8px 10px !important;
+    font-size: 0.85rem !important;
+  }
 }
 
 .hub-logo {
