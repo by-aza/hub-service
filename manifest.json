@@ -1,6 +1,6 @@
 {
   "name": "HUB Auto Parts",
-  "short_name": "HUB",
+  "short_name": "DonCSN",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",

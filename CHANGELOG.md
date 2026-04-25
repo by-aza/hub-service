@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.2 — 2026-04-26
+### Update: Optimizare mobil (public)
+- Adauga masina - optimizat mobil
+- Activare PWA - instalare ca aplicatie telefon
+- Corectat erori
+
 ## v0.2.1 — 2026-04-24
 ### Update: Optimizare mobil (public)
 - HUB, COnsumabile, Telefoane clienti optimizate mobil
