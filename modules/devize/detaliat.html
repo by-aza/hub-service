@@ -80,6 +80,8 @@ body {
 .btn-print { background-color: #0275d8; color: white; }
 .btn-add   { background-color: #5cb85c; color: white; }
 .btn-clear { background-color: #c62828; color: white; }
+.btn-save  { background-color: #1565c0; color: white; }
+.btn-load  { background-color: #00897b; color: white; }
 
 /* ============================================
    TITLU DEVIZ
@@ -331,8 +333,8 @@ td:nth-child(3) input {
         <button class="btn btn-print" onclick="window.print()">Printează PDF</button>
         <button class="btn btn-add" onclick="addRow()">+ Adaugă Rând</button>
         <button class="btn btn-clear" onclick="clearAll()">Șterge tot devizul</button>
-		<button onclick="saveDeviz()">💾 Save</button>
-        <button onclick="loadDeviz()">📂 Load</button>
+		<button class="btn btn-save" id="saveBtn" onclick="saveDeviz()">💾 Save</button>
+        <button class="btn btn-load" onclick="loadDeviz()">📂 Load</button>
 		
 		<a href="../../index.html" class="btn btn-back">Înapoi la HUB</a>
 		
@@ -347,8 +349,8 @@ td:nth-child(3) input {
 
         <!-- DATE AUTOVEHICUL -->
         <div class="info-section">
-            <div><strong>Autovehicul:</strong> <input type="text"></div>
-            <div><strong>Motorizare:</strong> <input type="text"></div>
+            <div><strong>Autovehicul:</strong> <input type="text" id="autovehicul"></div>
+            <div><strong>Motorizare:</strong> <input type="text" id="motorizare"></div>
             <div><strong>Nr. înmatriculare:</strong> <input type="text" id="nrAuto" oninput="updateTitle()"></div>
         </div>
 
@@ -432,60 +434,221 @@ td:nth-child(3) input {
 //  Adaugă un rând nou în tabel
 // ===============================
 
-//  Functia incarcare Deviz salvat
-function loadDeviz() {
-    const saved = localStorage.getItem("deviz2_detaliat");
-    if (!saved) {
-        alert("Nu există date salvate!");
-        return;
+const DEVIZ_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgBGRJTHNMx3ezTBCtBKMd79O8PRLhFq7J93uwTz8TgdJMB5HarXJJinyll8ENwAfkxw/exec";
+
+function normalizeText(value) {
+    return String(value || "").trim().toLowerCase();
+}
+
+function parseDevizeResponse(rawText) {
+    const parsed = JSON.parse(rawText);
+    if (Array.isArray(parsed)) {
+        return parsed;
     }
 
-    const data = JSON.parse(saved);
-    const tbody = document.querySelector("#itemsBody");
+    if (parsed && Array.isArray(parsed.data)) {
+        return parsed.data;
+    }
 
-    // Ștergem rândurile existente
+    if (parsed && Array.isArray(parsed.values)) {
+        return parsed.values;
+    }
+
+    return [];
+}
+
+function parsePieseValue(rawPiese) {
+    if (Array.isArray(rawPiese)) {
+        return rawPiese;
+    }
+
+    if (typeof rawPiese !== "string") {
+        return [];
+    }
+
+    const trimmed = rawPiese.trim();
+    if (!trimmed) {
+        return [];
+    }
+
+    try {
+        const parsed = JSON.parse(trimmed);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        // Uneori Apps Script trimite JSON-ul ca string încadrat în ghilimele
+        try {
+            const unquoted = trimmed.replace(/^"(.*)"$/s, "$1").replace(/\\"/g, "\"");
+            const parsedFallback = JSON.parse(unquoted);
+            return Array.isArray(parsedFallback) ? parsedFallback : [];
+        } catch (fallbackError) {
+            console.warn("Coloana piese nu este JSON valid:", error, fallbackError);
+            return [];
+        }
+    }
+}
+
+function fillItemsTable(piese) {
+    const tbody = document.querySelector("#itemsBody");
     tbody.innerHTML = "";
 
-    // Reconstruim rândurile
-    data.forEach(item => {
+    piese.forEach(item => {
         const row = document.createElement("tr");
-
         row.innerHTML = `
             <td class="piesa-cell">
-                <input type="text" value="${item.produs}">
-                <input type="checkbox" class="apply-discount" ${item.discount ? "checked" : ""} onchange="calculate()">
+                <input type="text">
+                <input type="checkbox" class="apply-discount" onchange="calculate()">
             </td>
-            <td><input type="number" class="qty" value="${item.qty}" oninput="calculate()"></td>
-            <td><input type="number" class="price" value="${item.price}" oninput="calculate()"></td>
-            <td class="row-total">${item.total}</td>
+            <td><input type="number" class="qty" oninput="calculate()"></td>
+            <td><input type="number" class="price" oninput="calculate()"></td>
+            <td class="row-total"></td>
             <td><button class="delete-btn" onclick="deleteRow(this)">✖</button></td>
         `;
 
+        row.querySelector("input[type='text']").value = item.produs || item.nume || "";
+        row.querySelector(".apply-discount").checked = Boolean(item.discount);
+        row.querySelector(".qty").value = item.qty ?? item.cantitate ?? "";
+        row.querySelector(".price").value = item.price ?? item.pret ?? "";
+        row.querySelector(".row-total").innerText = item.total || "";
         tbody.appendChild(row);
     });
 
-    calculate();
-    alert("Deviz încărcat!");
+    if (!piese.length) {
+        addRow();
+    }
+}
+
+//  Functia incarcare Deviz salvat
+async function loadDeviz() {
+    const nrCautat = document.getElementById("nrAuto").value.trim();
+    if (!nrCautat) {
+        alert("Introdu numărul de înmatriculare înainte de Load.");
+        return;
+    }
+
+    try {
+        const response = await fetch(DEVIZ_SCRIPT_URL, {
+            method: "GET"
+        });
+
+        if (!response.ok) {
+            throw new Error("Nu am putut prelua lista de devize.");
+        }
+
+        const responseText = await response.text();
+        const devize = parseDevizeResponse(responseText);
+        if (!Array.isArray(devize) || !devize.length) {
+            alert("Nu există devize în Google Sheets.");
+            return;
+        }
+
+        const targetPlate = normalizeText(nrCautat);
+        const devizGasit = devize.find(item => {
+            const plateValue = Array.isArray(item)
+                ? (item[2] ?? "")
+                : (item.nrInmatriculare ?? item.nrAuto ?? item["Nr. înmatriculare"] ?? item["nr inmatriculare"] ?? item.C ?? "");
+
+            const plateNormalized = normalizeText(plateValue);
+            if (!plateNormalized || plateNormalized.includes("inmatriculare")) {
+                return false;
+            }
+
+            return plateNormalized === targetPlate;
+        });
+
+        if (!devizGasit) {
+            alert("Devizul nu a fost găsit");
+            return;
+        }
+
+        const autovehicul = Array.isArray(devizGasit)
+            ? (devizGasit[0] ?? "")
+            : (devizGasit.autovehicul ?? devizGasit.Autovehicul ?? devizGasit.A ?? "");
+        const motorizare = Array.isArray(devizGasit)
+            ? (devizGasit[1] ?? "")
+            : (devizGasit.motorizare ?? devizGasit.Motorizare ?? devizGasit.B ?? "");
+        const nrInmatriculare = Array.isArray(devizGasit)
+            ? (devizGasit[2] ?? "")
+            : (devizGasit.nrInmatriculare ?? devizGasit.nrAuto ?? devizGasit["Nr. înmatriculare"] ?? devizGasit.C ?? "");
+        const pieseRaw = Array.isArray(devizGasit)
+            ? (devizGasit[3] ?? "")
+            : (devizGasit.piese ?? devizGasit.Piese ?? devizGasit.D ?? "");
+
+        document.getElementById("autovehicul").value = autovehicul;
+        document.getElementById("motorizare").value = motorizare;
+        document.getElementById("nrAuto").value = nrInmatriculare;
+
+        const piese = parsePieseValue(pieseRaw);
+        fillItemsTable(piese);
+
+        calculate();
+        updateTitle();
+        alert("Deviz încărcat din Google Sheets.");
+    } catch (error) {
+        console.error("Eroare la încărcare:", error);
+        alert("Încărcarea a eșuat. Verifică scriptul Apps Script (doGet) și conexiunea.");
+    }
+
 }
 
 //  Functia salvare Deviz
-function saveDeviz() {
+async function saveDeviz() {
+    const saveBtn = document.getElementById("saveBtn");
+    const initialBtnText = saveBtn ? saveBtn.innerText : "";
+
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerText = "Se salvează...";
+        saveBtn.style.opacity = "0.7";
+        saveBtn.style.cursor = "not-allowed";
+    }
+
     const rows = document.querySelectorAll("#itemsBody tr");
     let data = [];
 
     rows.forEach(row => {
         const obj = {
-            produs: row.querySelector("input[type='text']").value,
+            produs: row.querySelector("input[type='text']").value.trim(),
             discount: row.querySelector(".apply-discount").checked,
-            qty: row.querySelector(".qty").value,
-            price: row.querySelector(".price").value,
+            qty: parseFloat(row.querySelector(".qty").value) || 0,
+            price: parseFloat(row.querySelector(".price").value) || 0,
             total: row.querySelector(".row-total").innerText
         };
-        data.push(obj);
+        if (obj.produs || obj.qty > 0 || obj.price > 0) {
+            data.push(obj);
+        }
     });
 
-    localStorage.setItem("deviz2_detaliat", JSON.stringify(data));
-    alert("Deviz salvat local!");
+    const payload = {
+        autovehicul: document.getElementById("autovehicul").value.trim(),
+        motorizare: document.getElementById("motorizare").value.trim(),
+        nrInmatriculare: document.getElementById("nrAuto").value.trim(),
+        piese: data,
+        totalGeneral: parseFloat(document.getElementById("grandTotal").innerText) || 0
+    };
+
+    try {
+        await fetch(DEVIZ_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        localStorage.setItem("deviz2_detaliat", JSON.stringify(data));
+        alert("Datele au fost trimise către Google Sheets (Verifică tabelul)");
+    } catch (error) {
+        console.error("Eroare la salvare:", error);
+        alert("Salvarea a eșuat. Verifică conexiunea sau scriptul Apps Script.");
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerText = initialBtnText;
+            saveBtn.style.opacity = "1";
+            saveBtn.style.cursor = "pointer";
+        }
+    }
 }
 
 function addRow() {

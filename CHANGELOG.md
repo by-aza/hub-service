@@ -1,10 +1,9 @@
 # Changelog
 
-## v0.2.2 — 2026-04-26
-### Update: Optimizare mobil (public)
-- Adauga masina - optimizat mobil
-- Activare PWA - instalare ca aplicatie telefon
-- Corectat erori
+## v0.2.2 — 2026-04-27
+- Salvare în Cloud: Devizele sunt acum salvate automat în Google Sheets, eliminând riscul pierderii datelor din browser.
+- Arhivă & Recuperare: Adăugată funcția „Load” care permite reîncărcarea oricărui deviz salvat anterior folosind numărul de înmatriculare.
+- PWA (App Mode): Site-ul poate fi instalat acum ca o aplicație nativă pe telefon, oferind un spațiu de lucru mai mare și acces rapid.
 
 ## v0.2.1 — 2026-04-24
 ### Update: Optimizare mobil (public)
