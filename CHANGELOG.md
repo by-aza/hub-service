@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.0 — 2026-04-28
+### Release: Stoc Piese
+- Noua pagină stoc_magazie.html este acum activă, oferind gestiune completă pentru piesele noi și SH cu locații specifice pe raft.
+- Sincronizare Gestiune: Coloanele de date sunt acum mapate pentru o vizualizare rapidă și precisă.
+- Alertă Stoc Critic: Implementată evidențierea vizuală prin culori (roșu) pentru piesele cu stoc zero.
+
 ## v0.2.2 — 2026-04-27
 - Salvare în Cloud: Devizele sunt acum salvate automat în Google Sheets, eliminând riscul pierderii datelor din browser.
 - Arhivă & Recuperare: Adăugată funcția „Load” care permite reîncărcarea oricărui deviz salvat anterior folosind numărul de înmatriculare.
